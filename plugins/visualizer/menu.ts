@@ -1,17 +1,13 @@
-import { readdirSync } from 'node:fs';
-import path from 'node:path';
-
 import { BrowserWindow } from 'electron';
 
-import { setMenuOptions } from '../../config/plugins';
+import * as Visualizers from './visualizers';
 
 import { MenuTemplate } from '../../menu';
+import { setMenuOptions } from '../../config/plugins';
 
 import type { ConfigType } from '../../config/dynamic';
 
-const visualizerTypes = readdirSync(path.join(__dirname, 'visualizers'))
-  .map((filename) => path.parse(filename).name)
-  .filter((filename) => filename !== 'visualizer');
+const visualizerTypes = Object.values(Visualizers).map((visualizer) => visualizer.name);
 
 export default (win: BrowserWindow, options: ConfigType<'visualizer'>): MenuTemplate => [
   {

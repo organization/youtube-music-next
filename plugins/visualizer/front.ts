@@ -2,7 +2,7 @@ import { Visualizer } from './visualizers/visualizer';
 
 import vudio from './visualizers/vudio';
 import wave from './visualizers/wave';
-import butterchurn from './visualizers/butterchurn';
+// import butterchurn from './visualizers/butterchurn';
 
 import defaultConfig from '../../config/defaults';
 
@@ -20,7 +20,7 @@ export default (options: ConfigType<'visualizer'>) => {
   if (optionsWithDefaults.type === 'wave') {
     visualizerType = wave;
   } else if (optionsWithDefaults.type === 'butterchurn') {
-    visualizerType = butterchurn;
+    // visualizerType = butterchurn;
   }
 
   document.addEventListener(
