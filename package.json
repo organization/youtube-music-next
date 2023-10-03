@@ -166,7 +166,7 @@
     "node-id3": "0.2.6",
     "simple-youtube-age-restriction-bypass": "git+https://github.com/MiepHD/Simple-YouTube-Age-Restriction-Bypass.git#v2.5.5",
     "vudio": "2.1.1",
-    "x11": "^2.3.0",
+    "x11": "2.3.0",
     "youtubei.js": "6.4.1",
     "ytpl": "2.3.0"
   },
