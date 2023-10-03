@@ -20,7 +20,6 @@ export default defineConfig({
       preferBuiltins: true,
     }),
     commonjs({
-      strictRequires: false,
       ignoreDynamicRequires: true,
     }),
     json(),
@@ -47,8 +46,7 @@ export default defineConfig({
   external: [
     'electron',
     'sharp',
-    'xml2js',
-    'youtubei.js',
+    'custom-electron-prompt',
     ...builtinModules,
   ],
 });

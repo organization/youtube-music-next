@@ -17,10 +17,9 @@ export default defineConfig({
     }),
     nodeResolvePlugin({
       browser: false,
-      preferBuiltins: false,
+      preferBuiltins: true,
     }),
     commonjs({
-      strictRequires: false,
       ignoreDynamicRequires: true,
     }),
     json(),
@@ -43,7 +42,7 @@ export default defineConfig({
   external: [
     'electron',
     'sharp',
-    'xml2js',
+    'custom-electron-prompt',
     ...builtinModules,
   ],
 });

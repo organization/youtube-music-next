@@ -12,8 +12,6 @@ import { YoutubePlayer } from '../../types/youtube-player';
 
 import type { ConfigType } from '../../config/dynamic';
 
-
-
 interface LanguageOptions {
   displayName: string;
   id: string | null;

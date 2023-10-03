@@ -1,13 +1,11 @@
 import { BrowserWindow } from 'electron';
 
-import * as Visualizers from './visualizers';
-
 import { MenuTemplate } from '../../menu';
 import { setMenuOptions } from '../../config/plugins';
 
 import type { ConfigType } from '../../config/dynamic';
 
-const visualizerTypes = Object.values(Visualizers).map((visualizer) => visualizer.name);
+const visualizerTypes = ['butterchurn', 'vudio', 'wave']; // For bundling
 
 export default (win: BrowserWindow, options: ConfigType<'visualizer'>): MenuTemplate => [
   {
