@@ -22,7 +22,6 @@
         "!dist/plugins/taskbar-mediacontrol${/*}",
         "license",
         "node_modules",
-        "!node_modules/sharp/vendor",
         "!node_modules/**/*.map",
         "!node_modules/**/*.ts",
         "package.json",
