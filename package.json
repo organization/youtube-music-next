@@ -104,8 +104,8 @@
     }
   },
   "scripts": {
-    "test": "playwright test",
-    "test:debug": "DEBUG=pw:browser* playwright test",
+    "test": "npm run build && playwright test",
+    "test:debug": "DEBUG=pw:browser* npm run build && playwright test",
     "rollup:preload": "rollup -c rollup.preload.config.ts --configPlugin @rollup/plugin-typescript --bundleConfigAsCjs",
     "rollup:main": "rollup -c rollup.main.config.ts --configPlugin @rollup/plugin-typescript --bundleConfigAsCjs",
     "build": "npm run rollup:preload && npm run rollup:main",

@@ -16,16 +16,9 @@ test('YouTube Music App - With default settings, app is launched and visible', a
       '--disable-gpu',
       '--whitelisted-ips=',
       '--disable-dev-shm-usage',
+      'dist/index.js',
     ],
-    env: {
-      ELECTRON_ENABLE_LOGGING: true,
-      ELECTRON_ENABLE_STACK_DUMPING: true,
-      NODE_ENV: 'test',
-    },
   });
-
-  app.process().stdout.on('data', (data) => console.log(`stdout: ${data}`));
-  app.process().stderr.on('data', (error) => console.log(`stderr: ${error}`));
 
   const window = await app.firstWindow();
 
