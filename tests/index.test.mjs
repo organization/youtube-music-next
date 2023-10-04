@@ -1,7 +1,6 @@
-const path = require('node:path');
-
-const { _electron: electron } = require('playwright');
-const { test, expect } = require('@playwright/test');
+import path from 'node:path';
+import { _electron as electron } from 'playwright';
+import { expect, test } from '@playwright/test';
 
 process.env.NODE_ENV = 'test';
 
