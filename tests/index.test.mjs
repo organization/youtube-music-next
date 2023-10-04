@@ -16,6 +16,11 @@ test('YouTube Music App - With default settings, app is launched and visible', a
       '--whitelisted-ips=',
       '--disable-dev-shm-usage',
     ],
+    env: {
+      ELECTRON_ENABLE_LOGGING: true,
+      ELECTRON_ENABLE_STACK_DUMPING: true,
+      NODE_ENV: 'test',
+    },
   });
 
   const window = await app.firstWindow();
