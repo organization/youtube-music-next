@@ -18,16 +18,20 @@ export default defineConfig({
     nodeResolvePlugin({
       browser: false,
       preferBuiltins: true,
+      exportConditions: ['node', 'default', 'module', 'import'] ,
     }),
     commonjs({
       ignoreDynamicRequires: true,
+    }),
+    wasmPlugin({
+      maxFileSize: 0,
+      targetEnv: 'browser',
     }),
     json(),
     string({
       include: '**/*.html',
     }),
     css(),
-    wasmPlugin(),
     copy({
       targets: [
         { src: 'assets', dest: 'dist/' },
@@ -47,6 +51,7 @@ export default defineConfig({
     'electron',
     'sharp',
     'custom-electron-prompt',
+    'youtubei.js', // https://github.com/LuanRT/YouTube.js/pull/509
     ...builtinModules,
   ],
 });

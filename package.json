@@ -14,19 +14,37 @@
   "build": {
     "appId": "com.github.th-ch.youtube-music",
     "productName": "YouTube Music",
+    "files": [
+      "!*",
+      "dist",
+      "license",
+      "!node_modules",
+      "node_modules/custom-electron-prompt/**",
+      "node_modules/youtubei.js/**",
+      "node_modules/undici/**",
+      "node_modules/@fastify/busboy/**",
+      "node_modules/jintr/**",
+      "node_modules/acorn/**",
+      "node_modules/tslib/**",
+      "node_modules/sharp/**",
+      "!node_modules/sharp/vendor/*/win32-x64",
+      "node_modules/semver/**",
+      "node_modules/lru-cache/**",
+      "node_modules/detect-libc/**",
+      "node_modules/color/**",
+      "node_modules/color-convert/**",
+      "node_modules/color-string/**",
+      "node_modules/color-name/**",
+      "node_modules/simple-swizzle/**",
+      "node_modules/is-arrayish/**",
+      "node_modules/@cliqz/adblocker-electron-preload/**",
+      "node_modules/@cliqz/adblocker-content/**",
+      "node_modules/@cliqz/adblocker-extended-selectors/**",
+      "!node_modules/**/*.map",
+      "!node_modules/**/*.ts"
+    ],
     "mac": {
       "identity": null,
-      "files": [
-        "!*",
-        "dist",
-        "!dist/plugins/taskbar-mediacontrol${/*}",
-        "license",
-        "node_modules",
-        "!node_modules/**/*.map",
-        "!node_modules/**/*.ts",
-        "package.json",
-        "tests"
-      ],
       "target": [
         {
           "target": "dmg",
@@ -40,18 +58,6 @@
     },
     "win": {
       "icon": "assets/generated/icons/win/icon.ico",
-      "files": [
-        "!*",
-        "dist",
-        "!dist/plugins/touchbar${/*}",
-        "license",
-        "node_modules",
-        "!node_modules/sharp/vendor",
-        "!node_modules/**/*.map",
-        "!node_modules/**/*.ts",
-        "package.json",
-        "tests"
-      ],
       "target": [
         {
           "target": "nsis",
@@ -74,18 +80,6 @@
     },
     "linux": {
       "icon": "assets/generated/icons/png",
-      "files": [
-        "!*",
-        "dist",
-        "!dist/plugins/{touchbar,taskbar-mediacontrol}${/*}",
-        "license",
-        "node_modules",
-        "!node_modules/sharp/vendor",
-        "!node_modules/**/*.map",
-        "!node_modules/**/*.ts",
-        "package.json",
-        "tests"
-      ],
       "category": "AudioVideo",
       "target": [
         "AppImage",

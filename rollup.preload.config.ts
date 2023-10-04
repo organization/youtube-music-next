@@ -27,7 +27,10 @@ export default defineConfig({
       include: '**/*.html',
     }),
     css(),
-    wasmPlugin(),
+    wasmPlugin({
+      maxFileSize: 0,
+      targetEnv: 'browser',
+    }),
     image({ dom: true }),
     terser({
       ecma: 2020,
