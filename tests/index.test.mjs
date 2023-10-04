@@ -24,6 +24,9 @@ test('YouTube Music App - With default settings, app is launched and visible', a
     },
   });
 
+  app.process().stdout.on('data', (data) => console.log(`stdout: ${data}`));
+  app.process().stderr.on('data', (error) => console.log(`stderr: ${error}`));
+
   const window = await app.firstWindow();
 
   const consentForm = await window.$(
