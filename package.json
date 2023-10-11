@@ -197,7 +197,7 @@
     "playwright": "1.38.1",
     "rollup": "4.0.2",
     "rollup-plugin-copy": "3.5.0",
-    "rollup-plugin-import-css": "3.3.4",
+    "rollup-plugin-import-css": "3.3.5",
     "rollup-plugin-string": "3.0.0",
     "typescript": "5.2.2"
   },
