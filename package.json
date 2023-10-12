@@ -150,7 +150,7 @@
     "xml2js": "0.6.2",
     "node-fetch": "2.7.0",
     "@electron/universal": "1.4.2",
-    "@babel/runtime": "7.23.1"
+    "@babel/runtime": "7.23.2"
   },
   "devDependencies": {
     "@playwright/test": "1.38.1",
