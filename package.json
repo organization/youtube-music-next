@@ -126,7 +126,7 @@
     "rollup": "4.1.1",
     "node-gyp": "9.4.0",
     "xml2js": "0.6.2",
-    "node-fetch": "2.7.0",
+    "node-fetch": "3.3.2",
     "@electron/universal": "1.4.2",
     "@babel/runtime": "7.23.2"
   },
