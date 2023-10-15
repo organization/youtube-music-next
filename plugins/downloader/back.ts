@@ -8,12 +8,11 @@ import is from 'electron-is';
 import filenamify from 'filenamify';
 import { Mutex } from 'async-mutex';
 import { createFFmpeg } from '@ffmpeg.wasm/main';
-
 import NodeID3, { TagConstants } from 'node-id3';
 
-import { cropMaxWidth, getFolder, presets, sendFeedback as sendFeedback_, setBadge } from './utils';
-
+import { cropMaxWidth, getFolder, sendFeedback as sendFeedback_, setBadge } from './utils';
 import config from './config';
+import { YoutubeFormatList, type Preset, DefaultPresetList } from './types';
 
 import style from './style.css';
 
@@ -221,13 +220,32 @@ async function downloadSongUnsafe(
     );
   }
 
-  const preset = config.get('preset') ?? 'mp3';
-  let presetSetting: { extension: string; ffmpegArgs: string[] } | null = null;
-  if (preset === 'opus') {
-    presetSetting = presets[preset];
+  const selectedPreset = config.get('selectedPreset') ?? 'mp3 (256kbps)';
+  let presetSetting: Preset;
+  if (selectedPreset === 'Custom') {
+    presetSetting = config.get('customPresetSetting') ?? DefaultPresetList['Custom'];
+  } else if (selectedPreset === 'Source') {
+    presetSetting = DefaultPresetList['Source'];
+  } else {
+    presetSetting = DefaultPresetList['mp3 (256kbps)'];
   }
 
-  let filename = filenamify(`${name}.${presetSetting?.extension ?? 'mp3'}`, {
+  const downloadOptions: FormatOptions = {
+    type: 'audio', // Audio, video or video+audio
+    quality: 'best', // Best, bestefficiency, 144p, 240p, 480p, 720p and so on.
+    format: 'any', // Media container format
+  };
+
+  const format = info.chooseFormat(downloadOptions);
+
+  let targetFileExtension: string;
+  if (!presetSetting?.extension) {
+    targetFileExtension = YoutubeFormatList.find((it) => it.itag === format.itag)?.container ?? 'mp3';
+  } else {
+    targetFileExtension = presetSetting?.extension ?? 'mp3';
+  }
+
+  let filename = filenamify(`${name}.${targetFileExtension}`, {
     replacement: '_',
     maxLength: 255,
   });
@@ -241,13 +259,6 @@ async function downloadSongUnsafe(
     return;
   }
 
-  const downloadOptions: FormatOptions = {
-    type: 'audio', // Audio, video or video+audio
-    quality: 'best', // Best, bestefficiency, 144p, 240p, 480p, 720p and so on.
-    format: 'any', // Media container format
-  };
-
-  const format = info.chooseFormat(downloadOptions);
   const stream = await info.download(downloadOptions);
 
   console.info(
@@ -260,39 +271,20 @@ async function downloadSongUnsafe(
     mkdirSync(dir);
   }
 
-  const ffmpegArgs = config.get('ffmpegArgs');
+  const fileBuffer = await iterableStreamToTargetFile(
+    iterableStream,
+    targetFileExtension,
+    metadata,
+    presetSetting?.ffmpegArgs ?? [],
+    format.content_length ?? 0,
+    sendFeedback,
+    increasePlaylistProgress,
+  );
 
-  if (presetSetting && presetSetting?.extension !== 'mp3') {
-    const file = createWriteStream(filePath);
-    let downloaded = 0;
-    const total: number = format.content_length ?? 1;
-
-    for await (const chunk of iterableStream) {
-      downloaded += chunk.length;
-      const ratio = downloaded / total;
-      const progress = Math.floor(ratio * 100);
-      sendFeedback(`Download: ${progress}%`, ratio);
-      increasePlaylistProgress(ratio);
-      file.write(chunk);
-    }
-
-    await ffmpegWriteTags(
-      filePath,
-      metadata,
-      presetSetting.ffmpegArgs,
-      ffmpegArgs,
-    );
-    sendFeedback(null, -1);
-  } else {
-    const fileBuffer = await iterableStreamToMP3(
-      iterableStream,
-      metadata,
-      ffmpegArgs,
-      format.content_length ?? 0,
-      sendFeedback,
-      increasePlaylistProgress,
-    );
-    if (fileBuffer) {
+  if (fileBuffer) {
+    if (targetFileExtension !== 'mp3') {
+      createWriteStream(filePath).write(fileBuffer);
+    } else {
       const buffer = await writeID3(Buffer.from(fileBuffer), metadata, sendFeedback);
       if (buffer) {
         writeFileSync(filePath, buffer);
@@ -304,10 +296,11 @@ async function downloadSongUnsafe(
   console.info(`Done: "${filePath}"`);
 }
 
-async function iterableStreamToMP3(
+async function iterableStreamToTargetFile(
   stream: AsyncGenerator<Uint8Array, void>,
+  extension: string,
   metadata: CustomSongInfo,
-  ffmpegArgs: string[],
+  presetFfmpegArgs: string[],
   contentLength: number,
   sendFeedback: (str: string, value?: number) => void,
   increasePlaylistProgress: (value: number) => void = () => {
@@ -347,13 +340,14 @@ async function iterableStreamToMP3(
       increasePlaylistProgress(0.15 + (ratio * 0.85));
     });
 
+    const safeVideoNameWithExtension = `${safeVideoName}.${extension}`;
     try {
       await ffmpeg.run(
         '-i',
         safeVideoName,
-        ...ffmpegArgs,
+        ...presetFfmpegArgs,
         ...getFFmpegMetadataArgs(metadata),
-        `${safeVideoName}.mp3`,
+        safeVideoNameWithExtension,
       );
     } finally {
       ffmpeg.FS('unlink', safeVideoName);
@@ -362,9 +356,9 @@ async function iterableStreamToMP3(
     sendFeedback('Saving…');
 
     try {
-      return ffmpeg.FS('readFile', `${safeVideoName}.mp3`);
+      return ffmpeg.FS('readFile', safeVideoNameWithExtension);
     } finally {
-      ffmpeg.FS('unlink', `${safeVideoName}.mp3`);
+      ffmpeg.FS('unlink', safeVideoNameWithExtension);
     }
   } catch (error: unknown) {
     sendError(error as Error, safeVideoName);
@@ -466,11 +460,18 @@ export async function downloadPlaylist(givenUrl?: string | URL) {
     return;
   }
 
-  let playlistTitle = playlist.header?.title?.text ?? '';
-  const isAlbum = playlistTitle?.startsWith('Album - ');
-  if (isAlbum) {
-    playlistTitle = playlistTitle.slice(8);
-  }
+  const normalPlaylistTitle = playlist.header?.title?.text;
+  const playlistTitle = normalPlaylistTitle ??
+    playlist
+      .page
+      .contents_memo
+      ?.get('MusicResponsiveListItemFlexColumn')
+      ?.at(2)
+      ?.as(YTNodes.MusicResponsiveListItemFlexColumn)
+      ?.title
+      ?.text ??
+    'NO_TITLE';
+  const isAlbum = !normalPlaylistTitle;
 
   let safePlaylistTitle = filenamify(playlistTitle, { replacement: ' ' });
   if (!is.macOS()) {
@@ -544,29 +545,6 @@ export async function downloadPlaylist(givenUrl?: string | URL) {
   }
 }
 
-async function ffmpegWriteTags(filePath: string, metadata: CustomSongInfo, presetFFmpegArgs: string[] = [], ffmpegArgs: string[] = []) {
-  const releaseFFmpegMutex = await ffmpegMutex.acquire();
-
-  try {
-    if (!ffmpeg.isLoaded()) {
-      await ffmpeg.load();
-    }
-
-    await ffmpeg.run(
-      '-i',
-      filePath,
-      ...getFFmpegMetadataArgs(metadata),
-      ...presetFFmpegArgs,
-      ...ffmpegArgs,
-      filePath,
-    );
-  } catch (error: unknown) {
-    sendError(error as Error);
-  } finally {
-    releaseFFmpegMutex();
-  }
-}
-
 function getFFmpegMetadataArgs(metadata: CustomSongInfo) {
   if (!metadata) {
     return [];
@@ -601,8 +579,7 @@ const getMetadata = (info: TrackInfo): CustomSongInfo => ({
   videoId: info.basic_info.id!,
   title: cleanupName(info.basic_info.title!),
   artist: cleanupName(info.basic_info.author!),
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-explicit-any
-  album: (info.player_overlays?.browser_media_session as any)?.album?.text as string | undefined,
+  album: info.player_overlays?.browser_media_session?.as(YTNodes.BrowserMediaSession).album?.text,
   imageSrc: info.basic_info.thumbnail?.find((t) => !t.url.endsWith('.webp'))?.url,
   views: info.basic_info.view_count!,
   songDuration: info.basic_info.duration!,
