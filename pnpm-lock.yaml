@@ -136,8 +136,8 @@ devDependencies:
     specifier: 0.5.1
     version: 0.5.1
   '@types/electron-localshortcut':
-    specifier: 3.1.1
-    version: 3.1.1
+    specifier: 3.1.2
+    version: 3.1.2
   '@types/howler':
     specifier: 2.2.9
     version: 2.2.9
@@ -909,8 +909,8 @@ packages:
       '@types/ms': 0.7.32
     dev: true
 
-  /@types/electron-localshortcut@3.1.1:
-    resolution: {integrity: sha512-wKmSZF2j+20/1SVbhcnqi0k+cLEMFjz4PPgNmUFjRdr+KiDRhX7f9hZd1wY56UhPtp9TJm4KAUQncrXcGfpGqw==}
+  /@types/electron-localshortcut@3.1.2:
+    resolution: {integrity: sha512-eWnTxzZHtYLL7PZuWP/hizUyX6VVjI5eUa5lzyA0gCDeLqHbgyccD8JsJ1Ew+vtjY2XUA8y05hwS6XOf3kIOCw==}
     dependencies:
       electron: 27.0.0
     transitivePeerDependencies:
