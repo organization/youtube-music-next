@@ -87,8 +87,8 @@
     }
   },
   "scripts": {
-    "test": "yarpm-pnpm run build && playwright test",
-    "test:debug": "yarpm-pnpm run build && cross-env DEBUG=pw:*,-pw:test:protocol playwright test",
+    "test": "playwright test",
+    "test:debug": "cross-env DEBUG=pw:*,-pw:test:protocol playwright test",
     "rollup:preload": "rollup -c rollup.preload.config.ts --configPlugin @rollup/plugin-typescript --bundleConfigAsCjs",
     "rollup:main": "rollup -c rollup.main.config.ts --configPlugin @rollup/plugin-typescript --bundleConfigAsCjs",
     "build": "yarpm-pnpm run rollup:preload && yarpm-pnpm run rollup:main",
@@ -181,7 +181,7 @@
     "builtin-modules": "^3.3.0",
     "cross-env": "7.0.3",
     "del-cli": "5.1.0",
-    "electron": "27.0.0",
+    "electron": "27.0.1",
     "electron-builder": "24.6.4",
     "electron-devtools-installer": "3.2.0",
     "eslint": "8.51.0",
