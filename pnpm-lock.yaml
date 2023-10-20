@@ -15,10 +15,10 @@ overrides:
 dependencies:
   '@cliqz/adblocker-electron':
     specifier: 1.26.8
-    version: 1.26.8(electron@27.0.1)
+    version: 1.26.8(electron@27.0.2)
   '@cliqz/adblocker-electron-preload':
     specifier: 1.26.8
-    version: 1.26.8(electron@27.0.1)
+    version: 1.26.8(electron@27.0.2)
   '@ffmpeg.wasm/core-mt':
     specifier: 0.12.0
     version: 0.12.0
@@ -51,7 +51,7 @@ dependencies:
     version: 10.2.0
   custom-electron-prompt:
     specifier: 1.5.7
-    version: 1.5.7(electron@27.0.1)
+    version: 1.5.7(electron@27.0.2)
   electron-debug:
     specifier: 3.2.0
     version: 3.2.0
@@ -160,8 +160,8 @@ devDependencies:
     specifier: 5.1.0
     version: 5.1.0
   electron:
-    specifier: 27.0.1
-    version: 27.0.1
+    specifier: 27.0.2
+    version: 27.0.2
   electron-builder:
     specifier: 24.6.4
     version: 24.6.4
@@ -252,23 +252,23 @@ packages:
       '@cliqz/adblocker-extended-selectors': 1.26.8
     dev: false
 
-  /@cliqz/adblocker-electron-preload@1.26.8(electron@27.0.1):
+  /@cliqz/adblocker-electron-preload@1.26.8(electron@27.0.2):
     resolution: {integrity: sha512-sWhND23IrP6f7wUtUt3+lAbNdmMYucwKVsMcMtInAk6vKz5bxpECsp+QBHXE7Z3MXLwa0dATGRVcC4RTLZBb/A==}
     peerDependencies:
       electron: '>11'
     dependencies:
       '@cliqz/adblocker-content': 1.26.8
-      electron: 27.0.1
+      electron: 27.0.2
     dev: false
 
-  /@cliqz/adblocker-electron@1.26.8(electron@27.0.1):
+  /@cliqz/adblocker-electron@1.26.8(electron@27.0.2):
     resolution: {integrity: sha512-8vuqiPMCOzGPfUehfvv7eDwQRw3sm3sdR3eZYU2wNGPNbUHf6gZbSBcsx12n3QNcbAxbdydtc/a3X4Eu5VOlxg==}
     peerDependencies:
       electron: '>11'
     dependencies:
       '@cliqz/adblocker': 1.26.8
-      '@cliqz/adblocker-electron-preload': 1.26.8(electron@27.0.1)
-      electron: 27.0.1
+      '@cliqz/adblocker-electron-preload': 1.26.8(electron@27.0.2)
+      electron: 27.0.2
       tldts-experimental: 6.0.16
     dev: false
 
@@ -912,7 +912,7 @@ packages:
   /@types/electron-localshortcut@3.1.2:
     resolution: {integrity: sha512-eWnTxzZHtYLL7PZuWP/hizUyX6VVjI5eUa5lzyA0gCDeLqHbgyccD8JsJ1Ew+vtjY2XUA8y05hwS6XOf3kIOCw==}
     dependencies:
-      electron: 27.0.1
+      electron: 27.0.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1929,12 +1929,12 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  /custom-electron-prompt@1.5.7(electron@27.0.1):
+  /custom-electron-prompt@1.5.7(electron@27.0.2):
     resolution: {integrity: sha512-ptRPJr6CpT06GWLMtg3GD2Lr7gWfXdWI+hR1S39eq+m/mUa2E118YmX6mPCbHdg5QB/W9UVhSpRqBM8FUh1G8w==}
     peerDependencies:
       electron: '>=10.0.0'
     dependencies:
-      electron: 27.0.1
+      electron: 27.0.2
     dev: false
 
   /dashdash@2.0.0:
@@ -2372,8 +2372,8 @@ packages:
       - supports-color
     dev: false
 
-  /electron@27.0.1:
-    resolution: {integrity: sha512-AjDGgpf2thNxVXoNqEG+0GCUK4upAEa2B+IoM5Yk9YrOLd6uUOEMfGI9rhPtj+jC14iKOvBdefY2uAzcDC0qng==}
+  /electron@27.0.2:
+    resolution: {integrity: sha512-4fbcHQ40ZDlqhr5Pamm+M5BF7ry2lGqjFTWTJ/mrBwuiPWu6xhV/RWgUhKBaLqKNfAaNl3eMxV3Jc82gv6JauQ==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
     requiresBuild: true
