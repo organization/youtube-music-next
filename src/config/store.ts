@@ -20,6 +20,13 @@ const setDefaultPluginOptions = (store: Conf<Record<string, unknown>>, plugin: k
 };
 
 const migrations = {
+  '>=2.1.3'(store: Conf<Record<string, unknown>>) {
+    const listenAlong = store.get('plugins.discord.listenAlong');
+    if (listenAlong !== undefined) {
+      store.set('plugins.discord.playOnYouTubeMusic', listenAlong);
+      store.delete('plugins.discord.listenAlong');
+    }
+  },
   '>=2.1.0'(store: Conf<Record<string, unknown>>) {
     const originalPreset = store.get('plugins.downloader.preset') as string | undefined;
     if (originalPreset) {

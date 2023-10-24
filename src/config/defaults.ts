@@ -76,7 +76,7 @@ const defaultConfig = {
     'adblocker': {
       enabled: true,
       cache: true,
-      blocker: blockers.WithBlocklists as string,
+      blocker: blockers.InPlayer as string,
       additionalBlockLists: [], // Additional list of filters, e.g "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt"
       disableDefaultLists: false,
     },
@@ -107,7 +107,7 @@ const defaultConfig = {
       autoReconnect: true, // If enabled, will try to reconnect to discord every 5 seconds after disconnecting or failing to connect
       activityTimoutEnabled: true, // If enabled, the discord rich presence gets cleared when music paused after the time specified below
       activityTimoutTime: 10 * 60 * 1000, // 10 minutes
-      listenAlong: true, // Add a "listen along" button to rich presence
+      playOnYouTubeMusic: true, // Add a "Play on YouTube Music" button to rich presence
       hideGitHubButton: false, // Disable the "View App On GitHub" button
       hideDurationLeft: false, // Hides the start and end time of the song to rich presence
     },
@@ -125,6 +125,7 @@ const defaultConfig = {
        * true in Windows, false in Linux and macOS (see youtube-music/config/store.ts)
        */
       enabled: false,
+      hideDOMWindowControls: false,
     },
     'last-fm': {
       enabled: false,
