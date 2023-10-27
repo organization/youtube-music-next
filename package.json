@@ -124,7 +124,7 @@
   },
   "overrides": {
     "rollup": "4.1.4",
-    "node-gyp": "9.4.0",
+    "node-gyp": "9.4.1",
     "xml2js": "0.6.2",
     "node-fetch": "2.7.0",
     "@electron/universal": "1.4.2",
@@ -187,7 +187,7 @@
     "eslint": "8.52.0",
     "eslint-plugin-import": "2.29.0",
     "eslint-plugin-prettier": "5.0.1",
-    "node-gyp": "9.4.0",
+    "node-gyp": "9.4.1",
     "playwright": "1.39.0",
     "rollup": "4.1.4",
     "rollup-plugin-copy": "3.5.0",
