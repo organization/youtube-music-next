@@ -101,8 +101,8 @@ dependencies:
     specifier: 2.3.0
     version: 2.3.0
   youtubei.js:
-    specifier: 6.4.1
-    version: 6.4.1
+    specifier: 7.0.0
+    version: 7.0.0
 
 devDependencies:
   '@milahu/patch-package':
@@ -5621,8 +5621,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /youtubei.js@6.4.1:
-    resolution: {integrity: sha512-GVrDkJmF5t378SeDiZPEAoegZ1pxjbEzNyXTuiQnL5LzPSZKA3IoJwL8lBNlRMKyksI5RbieoHzULsEt4AIbFw==}
+  /youtubei.js@7.0.0:
+    resolution: {integrity: sha512-z87cv6AAjj0c98BkD0qTJvBDTF2DdT+FntJUjmi+vHY2EV+CepeYQAE/eLsdhGvCb6LrNBgGVwVUzXpHYi8NoA==}
     dependencies:
       jintr: 1.1.0
       tslib: 2.6.2
