@@ -122,7 +122,7 @@
     }
   },
   "overrides": {
-    "rollup": "4.2.0",
+    "rollup": "4.3.0",
     "node-gyp": "10.0.1",
     "xml2js": "0.6.2",
     "node-fetch": "3.3.2",
@@ -186,7 +186,7 @@
     "eslint-plugin-prettier": "5.0.1",
     "node-gyp": "10.0.1",
     "playwright": "1.39.0",
-    "rollup": "4.2.0",
+    "rollup": "4.3.0",
     "rollup-plugin-copy": "3.5.0",
     "rollup-plugin-import-css": "3.3.5",
     "rollup-plugin-string": "3.0.0",
