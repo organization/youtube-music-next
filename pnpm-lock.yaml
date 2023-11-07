@@ -136,8 +136,8 @@ devDependencies:
     specifier: 3.1.2
     version: 3.1.2
   '@types/howler':
-    specifier: 2.2.10
-    version: 2.2.10
+    specifier: 2.2.11
+    version: 2.2.11
   '@types/html-to-text':
     specifier: 9.0.3
     version: 9.0.3
@@ -937,8 +937,8 @@ packages:
     resolution: {integrity: sha512-PwBsCBD3lDODn4xpje3Y1di0aDJp4Ww7aSfMRVw6ysnxD4I7Wmq2mBkSKaDtN403hqH5sp6c9xQUvFYY3+lkBg==}
     dev: false
 
-  /@types/howler@2.2.10:
-    resolution: {integrity: sha512-MnDUQZBaDhIFTQATeO4tzOCBobtPjo2MmR0co70tMyk+HNUJB0loojn+PRkky7SrKzfvU90SqufIlQlCrtjr+A==}
+  /@types/howler@2.2.11:
+    resolution: {integrity: sha512-7aBoUL6RbSIrqKnpEgfa1wSNUBK06mn08siP2QI0zYk7MXfEJAaORc4tohamQYqCqVESoDyRWSdQn2BOKWj2Qw==}
     dev: true
 
   /@types/html-to-text@9.0.3:
