@@ -139,8 +139,8 @@ devDependencies:
     specifier: 2.2.10
     version: 2.2.10
   '@types/html-to-text':
-    specifier: 9.0.3
-    version: 9.0.3
+    specifier: 9.0.4
+    version: 9.0.4
   '@typescript-eslint/eslint-plugin':
     specifier: 6.9.1
     version: 6.9.1(@typescript-eslint/parser@6.7.5)(eslint@8.53.0)(typescript@5.2.2)
@@ -941,8 +941,8 @@ packages:
     resolution: {integrity: sha512-MnDUQZBaDhIFTQATeO4tzOCBobtPjo2MmR0co70tMyk+HNUJB0loojn+PRkky7SrKzfvU90SqufIlQlCrtjr+A==}
     dev: true
 
-  /@types/html-to-text@9.0.3:
-    resolution: {integrity: sha512-ImzcLdHN3+zghCoZcA+vWd/t0GhM10S7lnvSq9YA6lbo4HGK10WIJ7n+NI7mbeVZeUtgrmK5fXM66kZcws1oHA==}
+  /@types/html-to-text@9.0.4:
+    resolution: {integrity: sha512-pUY3cKH/Nm2yYrEmDlPR1mR7yszjGx4DrwPjQ702C4/D5CwHuZTgZdIdwPkRbcuhs7BAh2L5rg3CL5cbRiGTCQ==}
     dev: true
 
   /@types/http-cache-semantics@4.0.2:
