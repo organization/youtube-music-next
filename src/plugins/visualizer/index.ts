@@ -1,6 +1,6 @@
 import emptyStyle from './empty-player.css?inline';
 
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 type WaveColor = {
   gradient: string[];

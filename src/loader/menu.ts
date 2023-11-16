@@ -1,6 +1,6 @@
 import { deepmerge } from 'deepmerge-ts';
 
-import { MenuPluginContext, MenuPluginFactory, PluginBaseConfig, PluginDefinition } from '../plugins/utils/builder';
+import { MenuPluginContext, MenuPluginFactory, PluginBaseConfig, PluginDefinition } from '../@types/plugin';
 import config from '../config';
 import { setApplicationMenu } from '../menu';
 

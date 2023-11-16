@@ -1,6 +1,6 @@
 import { blockers } from './types';
 
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 interface AdblockerConfig {
   /**

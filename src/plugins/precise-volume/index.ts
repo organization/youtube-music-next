@@ -1,6 +1,6 @@
 import hudStyle from './volume-hud.css?inline';
 
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 export type PreciseVolumePluginConfig = {
   enabled: boolean;

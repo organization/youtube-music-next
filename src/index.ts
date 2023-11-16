@@ -35,7 +35,7 @@ import {
   loadAllMainPlugins,
   registerMainPlugin
 } from './loader/main';
-import { MainPluginFactory, PluginBaseConfig, PluginDefinition } from './plugins/utils/builder';
+import { MainPluginFactory, PluginBaseConfig, PluginDefinition } from './@types/plugin';
 
 // Catch errors and log them
 unhandled({

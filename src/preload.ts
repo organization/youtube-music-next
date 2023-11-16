@@ -10,7 +10,7 @@ import {
   PluginBaseConfig,
   PluginDefinition,
   PreloadPluginFactory
-} from './plugins/utils/builder';
+} from './@types/plugin';
 import {
   forceLoadPreloadPlugin,
   forceUnloadPreloadPlugin,

@@ -1,6 +1,6 @@
 import titlebarStyle from './titlebar.css?inline';
 
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 const builder = createPluginBuilder('in-app-menu', {
   name: 'In-App Menu',

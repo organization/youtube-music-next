@@ -1,6 +1,6 @@
 import style from './style.css?inline';
 
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 const builder = createPluginBuilder('album-color-theme', {
   name: 'Album Color Theme',

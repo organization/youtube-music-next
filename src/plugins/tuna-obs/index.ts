@@ -1,4 +1,4 @@
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 const builder = createPluginBuilder('tuna-obs', {
   name: 'Tuna OBS',

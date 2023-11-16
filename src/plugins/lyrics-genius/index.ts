@@ -1,6 +1,6 @@
 import style from './style.css?inline';
 
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 export type LyricsGeniusPluginConfig = {
   enabled: boolean;

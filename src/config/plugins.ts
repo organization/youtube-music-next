@@ -3,7 +3,7 @@ import store from './store';
 
 import { restart } from '../providers/app-controls';
 
-import type { PluginBaseConfig } from '../plugins/utils/builder';
+import type { PluginBaseConfig } from '../@types/plugin';
 
 export function getPlugins() {
   return store.get('plugins') as Record<string, PluginBaseConfig>;

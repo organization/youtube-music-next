@@ -1,7 +1,7 @@
 import forceHideStyle from './force-hide.css?inline';
 import buttonSwitcherStyle from './button-switcher.css?inline';
 
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 export type VideoTogglePluginConfig = {
   enabled: boolean;

@@ -13,7 +13,7 @@ import pauseIcon from '@assets/media-icons-black/pause.png?asset&asarUnpack';
 import nextIcon from '@assets/media-icons-black/next.png?asset&asarUnpack';
 import previousIcon from '@assets/media-icons-black/previous.png?asset&asarUnpack';
 
-import { MainPluginContext } from '../utils/builder';
+import { MainPluginContext } from '@/@types/plugin';
 
 import type { NotificationsPluginConfig } from './index';
 

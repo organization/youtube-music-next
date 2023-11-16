@@ -1,4 +1,4 @@
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 const builder = createPluginBuilder('bypass-age-restrictions', {
   name: 'Bypass Age Restrictions',

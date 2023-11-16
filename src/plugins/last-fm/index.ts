@@ -1,4 +1,4 @@
-import { createPluginBuilder } from '../utils/builder';
+import { createPluginBuilder } from '@/@types/plugin';
 
 export interface LastFmPluginConfig {
   enabled: boolean;

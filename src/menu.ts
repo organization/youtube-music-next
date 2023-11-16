@@ -17,7 +17,7 @@ import {
   MenuPluginFactory,
   PluginBaseConfig,
   PluginDefinition
-} from './plugins/utils/builder';
+} from './@types/plugin';
 import { getAllMenuTemplate, loadAllMenuPlugins, registerMenuPlugin } from './loader/menu';
 
 export type MenuTemplate = Electron.MenuItemConstructorOptions[];

@@ -10,7 +10,7 @@ import {
   MainPluginFactory,
   PluginBaseConfig,
   PluginDefinition
-} from '../plugins/utils/builder';
+} from '../@types/plugin';
 
 const allPluginFactoryList: Record<string, MainPluginFactory<PluginBaseConfig>> = {};
 const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};

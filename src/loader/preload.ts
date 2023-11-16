@@ -6,7 +6,7 @@ import {
   PreloadPlugin,
   PluginContext,
   PreloadPluginFactory
-} from '../plugins/utils/builder';
+} from '../@types/plugin';
 import config from '../config';
 
 const allPluginFactoryList: Record<string, PreloadPluginFactory<PluginBaseConfig>> = {};

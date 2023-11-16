@@ -1,7 +1,7 @@
 import { rendererPlugins } from 'virtual:RendererPlugins';
 import { pluginBuilders } from 'virtual:PluginBuilders';
 
-import { PluginBaseConfig, PluginDefinition, RendererPluginFactory } from './plugins/utils/builder';
+import { PluginBaseConfig, PluginDefinition, RendererPluginFactory } from './@types/plugin';
 
 import { startingPages } from './providers/extracted-data';
 import setupSongInfo from './providers/song-info-front';
