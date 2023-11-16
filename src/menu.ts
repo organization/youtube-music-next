@@ -2,7 +2,7 @@ import is from 'electron-is';
 import { app, BrowserWindow, clipboard, dialog, Menu } from 'electron';
 
 
-import { menuPlugins as menuList } from 'virtual:MenuPlugins';
+import { menuPlugins } from 'virtual:MenuPlugins';
 
 import prompt from 'custom-electron-prompt';
 
@@ -11,12 +11,9 @@ import config from './config';
 import { startingPages } from './providers/extracted-data';
 import promptOptions from './providers/prompt-options';
 
-
 import { getAvailablePluginNames } from './plugins/utils/main';
 import {
-  MenuPluginFactory,
-  BasePluginSettings,
-  PluginDefinition
+  BasePluginSettings, PluginDef,
 } from './@types/plugin';
 import { getAllMenuTemplate, loadAllMenuPlugins, registerMenuPlugin } from './loader/menu';
 
@@ -49,11 +46,8 @@ export const refreshMenu = (win: BrowserWindow) => {
   }
 };
 
-Object.entries(pluginBuilders).forEach(([id, builder]) => {
-  const typedBuilder = builder as PluginDefinition<string, BasePluginSettings>;
-  const plugin = menuList[id] as MenuPluginFactory<BasePluginSettings> | undefined;
-
-  registerMenuPlugin(id, typedBuilder, plugin);
+Object.entries(menuPlugins).forEach(([id, plugin]) => {
+  registerMenuPlugin(id, plugin as PluginDef<string, BasePluginSettings>);
 });
 
 export const mainMenuTemplate = async (win: BrowserWindow): Promise<MenuTemplate> => {
@@ -62,7 +56,7 @@ export const mainMenuTemplate = async (win: BrowserWindow): Promise<MenuTemplate
   await loadAllMenuPlugins(win);
 
   const menuResult = Object.entries(getAllMenuTemplate()).map(([id, template]) => {
-    const pluginLabel = (pluginBuilders[id as keyof PluginList])?.name ?? id;
+    const pluginLabel = ((menuPlugins[id as keyof PluginList]) as PluginDef<string, BasePluginSettings>).name ?? id;
 
     if (!config.plugins.isEnabled(id)) {
       return [
@@ -89,7 +83,7 @@ export const mainMenuTemplate = async (win: BrowserWindow): Promise<MenuTemplate
     const predefinedTemplate = menuResult.find((it) => it[0] === id);
     if (predefinedTemplate) return predefinedTemplate[1];
 
-    const pluginLabel = pluginBuilders[id as keyof PluginList]?.name ?? id;
+    const pluginLabel = (menuPlugins[id as keyof PluginList] as PluginDef<string, BasePluginSettings>)?.name ?? id;
 
     return pluginEnabledMenu(id, pluginLabel, true, innerRefreshMenu);
   });

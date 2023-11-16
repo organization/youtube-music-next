@@ -87,10 +87,11 @@ export interface PluginDef<
 export const createPlugin = <
   ID extends string,
   Settings extends BasePluginSettings,
-  MainProperties extends Record<string, unknown>,
-  RendererProperties extends Record<string, unknown>,
+  MainProperties extends Record<string, unknown> = NonNullable<unknown>,
+  PreloadProperties extends Record<string, unknown> = NonNullable<unknown>,
+  RendererProperties extends Record<string, unknown> = NonNullable<unknown>,
 >(
-  def: Omit<PluginDef<ID, Settings, MainProperties, RendererProperties>, 'settings'> & {
-    settings?: Settings & { enabled: boolean };
+  def: Omit<PluginDef<ID, Settings, MainProperties, PreloadProperties, RendererProperties>, 'settings'> & {
+    settings: Settings & { enabled: boolean };
   },
-): PluginDef<ID, Settings, MainProperties, RendererProperties> => def as PluginDef<ID, Settings, MainProperties, RendererProperties>;
+): PluginDef<ID, Settings, MainProperties, PreloadProperties, RendererProperties> => def;

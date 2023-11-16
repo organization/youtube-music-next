@@ -2,7 +2,8 @@ import { deepmerge } from 'deepmerge-ts';
 
 import {
   BasePluginSettings,
-  PluginContext, PluginDef,
+  PluginContext,
+  PluginDef,
   PreloadPluginContext,
 } from '@/@types/plugin';
 import config from '@/config';
