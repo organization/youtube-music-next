@@ -4,12 +4,11 @@ import { clear, connect, isConnected, registerRefresh } from './main';
 
 import builder from './index';
 
-import { setMenuOptions } from '../../config/plugins';
-import promptOptions from '../../providers/prompt-options';
-import { singleton } from '../../providers/decorators';
+import { setMenuOptions } from '@/config/plugins';
+import promptOptions from '@/providers/prompt-options';
+import { singleton } from '@/providers/decorators';
 
-import type { MenuTemplate } from '../../menu';
-import type { ConfigType } from '../../config/dynamic';
+import type { MenuTemplate } from '@/menu';
 
 const registerRefreshOnce = singleton((refreshMenu: () => void) => {
   registerRefresh(refreshMenu);

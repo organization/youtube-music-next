@@ -1,4 +1,4 @@
-/// <reference types="electron-vite/node" />
+/// <reference @types="electron-vite/node" />
 
 declare module '*.html' {
   const html: string;

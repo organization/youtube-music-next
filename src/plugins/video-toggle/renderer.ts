@@ -6,8 +6,8 @@ import { ElementFromHtml } from '../utils/renderer';
 
 import { moveVolumeHud as preciseVolumeMoveVolumeHud } from '../precise-volume/renderer';
 
-import type { ThumbnailElement } from '../../types/get-player-response';
-import type { YoutubePlayer } from '../../types/youtube-player';
+import type { ThumbnailElement } from '@/@types/get-player-response';
+import type { YoutubePlayer } from '@/@types/youtube-player';
 
 export default builder.createRenderer(({ getConfig }) => {
   const moveVolumeHud = window.mainConfig.plugins.isEnabled('precise-volume') ?

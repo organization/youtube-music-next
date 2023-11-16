@@ -2,10 +2,10 @@ import downloadHTML from './templates/download.html?raw';
 
 import builder from './index';
 
-import defaultConfig from '../../config/defaults';
-import { getSongMenu } from '../../providers/dom-elements';
+import defaultConfig from '@/config/defaults';
+import { getSongMenu } from '@/providers/dom-elements';
 import { ElementFromHtml } from '../utils/renderer';
-import { getSongInfo } from '../../providers/song-info-front';
+import { getSongInfo } from '@/providers/song-info-front';
 
 let menu: Element | null = null;
 let progress: Element | null = null;

@@ -7,7 +7,7 @@ import interactive from './interactive';
 
 import builder, { NotificationsPluginConfig } from './index';
 
-import registerCallback, { SongInfo } from '../../providers/song-info';
+import registerCallback, { SongInfo } from '@/providers/song-info';
 
 let config: NotificationsPluginConfig = builder.config;
 

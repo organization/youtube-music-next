@@ -2,7 +2,7 @@ import is from 'electron-is';
 
 import builder from './index';
 
-import { setMenuOptions } from '../../config/plugins';
+import { setMenuOptions } from '@/config/plugins';
 
 export default builder.createMenu(async ({ getConfig }) => {
   const config = await getConfig();

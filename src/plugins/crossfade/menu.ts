@@ -4,7 +4,7 @@ import { BrowserWindow } from 'electron';
 
 import builder, { CrossfadePluginConfig } from './index';
 
-import promptOptions from '../../providers/prompt-options';
+import promptOptions from '@/providers/prompt-options';
 
 export default builder.createMenu(({ window, getConfig, setConfig }) => {
   const promptCrossfadeValues = async (win: BrowserWindow, options: CrossfadePluginConfig): Promise<Omit<CrossfadePluginConfig, 'enabled'> | undefined> => {

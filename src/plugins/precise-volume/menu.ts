@@ -4,7 +4,7 @@ import { BrowserWindow, MenuItem } from 'electron';
 
 import builder, { PreciseVolumePluginConfig } from './index';
 
-import promptOptions from '../../providers/prompt-options';
+import promptOptions from '@/providers/prompt-options';
 
 export default builder.createMenu(async ({ setConfig, getConfig, window }) => {
   const config = await getConfig();

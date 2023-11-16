@@ -2,7 +2,7 @@ import prompt from 'custom-electron-prompt';
 
 import builder from './index';
 
-import promptOptions from '../../providers/prompt-options';
+import promptOptions from '@/providers/prompt-options';
 
 export default builder.createMain(({ handle }) => ({
   onLoad(window) {

@@ -5,7 +5,7 @@ import pipHTML from './templates/picture-in-picture.html?raw';
 
 import builder, { PictureInPicturePluginConfig } from './index';
 
-import { getSongMenu } from '../../providers/dom-elements';
+import { getSongMenu } from '@/providers/dom-elements';
 
 import { ElementFromHtml } from '../utils/renderer';
 

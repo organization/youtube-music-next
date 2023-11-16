@@ -91,7 +91,7 @@ export interface Artist {
   iq?: number;
 }
 
-// TODO: Add more types
+// TODO: Add more @types
 export enum Type {
   Artist = 'artist',
 }

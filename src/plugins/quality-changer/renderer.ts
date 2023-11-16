@@ -4,7 +4,7 @@ import builder from './index';
 
 import { ElementFromHtml } from '../utils/renderer';
 
-import type { YoutubePlayer } from '../../types/youtube-player';
+import type { YoutubePlayer } from '@/@types/youtube-player';
 
 export default builder.createRenderer(({ invoke }) => {
   function $(selector: string): HTMLElement | null {

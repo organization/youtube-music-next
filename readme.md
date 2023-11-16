@@ -252,7 +252,7 @@ export default builder.createMain((context) => {
 ```typescript
 import builder from './index';
 
-import type { YoutubePlayer } from '../../types/youtube-player';
+import type { YoutubePlayer } from '../../@types/youtube-player';
 
 export default builder.createRenderer((context) => {
   return {

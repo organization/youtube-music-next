@@ -6,7 +6,7 @@ import { snakeToCamel, ToastStyles, urgencyLevels } from './utils';
 
 import builder, { NotificationsPluginConfig } from './index';
 
-import type { MenuTemplate } from '../../menu';
+import type { MenuTemplate } from '@/menu';
 
 export default builder.createMenu(async ({ getConfig, setConfig }) => {
   const config = await getConfig();

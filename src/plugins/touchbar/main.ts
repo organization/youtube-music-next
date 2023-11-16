@@ -2,8 +2,8 @@ import { TouchBar, NativeImage } from 'electron';
 
 import builder from './index';
 
-import registerCallback from '../../providers/song-info';
-import getSongControls from '../../providers/song-controls';
+import registerCallback from '@/providers/song-info';
+import getSongControls from '@/providers/song-controls';
 
 export default builder.createMain(() => {
   return {

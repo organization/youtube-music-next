@@ -3,7 +3,7 @@ import is from 'electron-is';
 
 import builder from './index';
 
-import registerCallback from '../../providers/song-info';
+import registerCallback from '@/providers/song-info';
 
 const secToMilisec = (t: number) => Math.round(Number(t) * 1e3);
 

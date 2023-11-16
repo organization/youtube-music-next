@@ -2,7 +2,7 @@ import type {
   BrowserWindow,
 } from 'electron';
 
-import type { YoutubePlayer } from '../../types/youtube-player';
+import type { YoutubePlayer } from '@/@types/youtube-player';
 
 type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;

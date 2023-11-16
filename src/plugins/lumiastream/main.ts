@@ -2,7 +2,7 @@ import { net } from 'electron';
 
 import builder from './index';
 
-import registerCallback from '../../providers/song-info';
+import registerCallback from '@/providers/song-info';
 
 const secToMilisec = (t?: number) => t ? Math.round(Number(t) * 1e3) : undefined;
 const previousStatePaused = null;

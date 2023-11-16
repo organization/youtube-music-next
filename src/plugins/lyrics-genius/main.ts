@@ -6,7 +6,7 @@ import { GetGeniusLyric } from './types';
 
 import builder from './index';
 
-import { cleanupName, type SongInfo } from '../../providers/song-info';
+import { cleanupName, type SongInfo } from '@/providers/song-info';
 
 const eastAsianChars = /\p{Script=Katakana}|\p{Script=Hiragana}|\p{Script=Hangul}|\p{Script=Han}/u;
 let revRomanized = false;

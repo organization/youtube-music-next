@@ -14,12 +14,12 @@
     "strict": true,
     "noImplicitAny": true,
     "strictFunctionTypes": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@assets/*": ["./assets/*"],
+      "*": ["./src/*.d.ts"]
+    }
   },
   "exclude": ["./dist"],
-  "paths": {
-    "@/*": ["./src/*"],
-    "@assets": ["./assets/*"],
-    "*": ["*.d.ts"]
-  }
 }

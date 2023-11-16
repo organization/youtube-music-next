@@ -2,9 +2,9 @@ import sliderHTML from './templates/slider.html?raw';
 
 import builder from './index';
 
-import { getSongMenu } from '../../providers/dom-elements';
+import { getSongMenu } from '@/providers/dom-elements';
 import { ElementFromHtml } from '../utils/renderer';
-import { singleton } from '../../providers/decorators';
+import { singleton } from '@/providers/decorators';
 
 
 function $<E extends Element = Element>(selector: string) {

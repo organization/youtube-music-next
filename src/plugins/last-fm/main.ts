@@ -4,8 +4,8 @@ import { net, shell } from 'electron';
 
 import builder, { type LastFmPluginConfig } from './index';
 
-import { setOptions } from '../../config/plugins';
-import registerCallback, { type SongInfo } from '../../providers/song-info';
+import { setOptions } from '@/config/plugins';
+import registerCallback, { type SongInfo } from '@/providers/song-info';
 
 interface LastFmData {
   method: string,

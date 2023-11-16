@@ -6,7 +6,7 @@ import registerMPRIS from './mpris';
 
 import builder, { ShortcutMappingType } from './index';
 
-import getSongControls from '../../providers/song-controls';
+import getSongControls from '@/providers/song-controls';
 
 
 function _registerGlobalShortcut(webContents: Electron.WebContents, shortcut: string, action: (webContents: Electron.WebContents) => void) {

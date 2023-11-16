@@ -4,7 +4,7 @@ import { cache } from './decorators';
 
 import config from '../config';
 
-import type { GetPlayerResponse } from '../types/get-player-response';
+import type { GetPlayerResponse } from '@/@types/get-player-response';
 
 export interface SongInfo {
   title: string;

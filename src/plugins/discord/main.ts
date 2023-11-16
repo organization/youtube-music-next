@@ -6,7 +6,7 @@ import { SetActivity } from '@xhayper/discord-rpc/dist/structures/ClientUser';
 
 import builder from './index';
 
-import registerCallback, { type SongInfoCallback, type SongInfo } from '../../providers/song-info';
+import registerCallback, { type SongInfoCallback, type SongInfo } from '@/providers/song-info';
 
 // Application ID registered by @Zo-Bro-23
 const clientId = '1043858434585526382';

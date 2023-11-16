@@ -2,9 +2,9 @@ import { overrideListener } from './override';
 
 import builder, { type PreciseVolumePluginConfig } from './index';
 
-import { debounce } from '../../providers/decorators';
+import { debounce } from '@/providers/decorators';
 
-import type { YoutubePlayer } from '../../types/youtube-player';
+import type { YoutubePlayer } from '@/@types/youtube-player';
 
 function $<E extends Element = Element>(selector: string) {
   return document.querySelector<E>(selector);

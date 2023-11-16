@@ -13,7 +13,7 @@ import {
   registerRendererPlugin
 } from './loader/renderer';
 
-import type { YoutubePlayer } from './types/youtube-player';
+import type { YoutubePlayer } from '@/@types/youtube-player';
 
 let api: (Element & YoutubePlayer) | null = null;
 

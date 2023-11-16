@@ -6,7 +6,7 @@ import { SkipSegment } from './types';
 
 import builder from './index';
 
-import type { GetPlayerResponse } from '../../types/get-player-response';
+import type { GetPlayerResponse } from '@/@types/get-player-response';
 
 const fetchSegments = async (apiURL: string, categories: string[], videoId: string) => {
   const sponsorBlockURL = `${apiURL}/api/skipSegments?videoID=${videoId}&categories=${JSON.stringify(

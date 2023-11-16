@@ -1,6 +1,6 @@
 import builder from './index';
 
-import type { SongInfo } from '../../providers/song-info';
+import type { SongInfo } from '@/providers/song-info';
 
 export default builder.createRenderer(({ on, invoke }) => ({
   onLoad() {
