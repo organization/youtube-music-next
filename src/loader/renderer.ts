@@ -1,20 +1,20 @@
 import { deepmerge } from 'deepmerge-ts';
 
 import {
-  PluginBaseConfig, PluginDefinition,
+  BasePluginSettings, PluginDefinition,
   RendererPlugin,
   RendererPluginContext,
   RendererPluginFactory
 } from '../@types/plugin';
 
-const allPluginFactoryList: Record<string, RendererPluginFactory<PluginBaseConfig>> = {};
-const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};
+const allPluginFactoryList: Record<string, RendererPluginFactory<BasePluginSettings>> = {};
+const allPluginBuilders: Record<string, PluginDefinition<string, BasePluginSettings>> = {};
 const unregisterStyleMap: Record<string, (() => void)[]> = {};
-const loadedPluginMap: Record<string, RendererPlugin<PluginBaseConfig>> = {};
+const loadedPluginMap: Record<string, RendererPlugin<BasePluginSettings>> = {};
 
 const createContext = <
-  Key extends keyof PluginBuilderList,
-  Config extends PluginBaseConfig = PluginBuilderList[Key]['config'],
+  Key extends keyof PluginList,
+  Config extends BasePluginSettings = PluginList[Key]['config'],
 >(id: Key): RendererPluginContext<Config> => ({
   getConfig: async () => {
     return await window.ipcRenderer.invoke('get-config', id) as Config;
@@ -31,7 +31,7 @@ const createContext = <
   },
 });
 
-export const forceUnloadRendererPlugin = (id: keyof PluginBuilderList) => {
+export const forceUnloadRendererPlugin = (id: keyof PluginList) => {
   unregisterStyleMap[id]?.forEach((unregister) => unregister());
   delete unregisterStyleMap[id];
 
@@ -41,7 +41,7 @@ export const forceUnloadRendererPlugin = (id: keyof PluginBuilderList) => {
   console.log('[YTMusic]', `"${id}" plugin is unloaded`);
 };
 
-export const forceLoadRendererPlugin = async (id: keyof PluginBuilderList) => {
+export const forceLoadRendererPlugin = async (id: keyof PluginList) => {
   try {
     const factory = allPluginFactoryList[id];
     if (!factory) return;
@@ -61,15 +61,15 @@ export const loadAllRendererPlugins = async () => {
   const pluginConfigs = window.mainConfig.plugins.getPlugins();
 
   for (const [pluginId, builder] of Object.entries(allPluginBuilders)) {
-    const typedBuilder = builder as PluginBuilderList[keyof PluginBuilderList];
+    const typedBuilder = builder as PluginList[keyof PluginList];
 
-    const config = deepmerge(typedBuilder.config, pluginConfigs[pluginId as keyof PluginBuilderList] ?? {});
+    const config = deepmerge(typedBuilder.config, pluginConfigs[pluginId as keyof PluginList] ?? {});
 
     if (config.enabled) {
-      await forceLoadRendererPlugin(pluginId as keyof PluginBuilderList);
+      await forceLoadRendererPlugin(pluginId as keyof PluginList);
     } else {
-      if (loadedPluginMap[pluginId as keyof PluginBuilderList]) {
-        forceUnloadRendererPlugin(pluginId as keyof PluginBuilderList);
+      if (loadedPluginMap[pluginId as keyof PluginList]) {
+        forceUnloadRendererPlugin(pluginId as keyof PluginList);
       }
     }
   }
@@ -77,11 +77,11 @@ export const loadAllRendererPlugins = async () => {
 
 export const unloadAllRendererPlugins = () => {
   for (const id of Object.keys(loadedPluginMap)) {
-    forceUnloadRendererPlugin(id as keyof PluginBuilderList);
+    forceUnloadRendererPlugin(id as keyof PluginList);
   }
 };
 
-export const getLoadedRendererPlugin = <Key extends keyof PluginBuilderList>(id: Key): RendererPlugin<PluginBuilderList[Key]['config']> | undefined => {
+export const getLoadedRendererPlugin = <Key extends keyof PluginList>(id: Key): RendererPlugin<PluginList[Key]['config']> | undefined => {
   return loadedPluginMap[id];
 };
 export const getAllLoadedRendererPlugins = () => {
@@ -89,8 +89,8 @@ export const getAllLoadedRendererPlugins = () => {
 };
 export const registerRendererPlugin = (
   id: string,
-  builder: PluginDefinition<string, PluginBaseConfig>,
-  factory?: RendererPluginFactory<PluginBaseConfig>,
+  builder: PluginDefinition<string, BasePluginSettings>,
+  factory?: RendererPluginFactory<BasePluginSettings>,
 ) => {
   if (factory) allPluginFactoryList[id] = factory;
   allPluginBuilders[id] = builder;

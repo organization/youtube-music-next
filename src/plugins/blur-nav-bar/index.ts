@@ -1,20 +1,22 @@
 import style from './style.css?inline';
+import { createPlugin } from '@/@types/plugin';
 
-import { createPluginBuilder } from '@/@types/plugin';
-
-const builder = createPluginBuilder('blur-nav-bar', {
+const plugin = createPlugin( {
+  id: 'blur-nav-bar',
   name: 'Blur Navigation Bar',
+  description: '',
+
   restartNeeded: true,
-  config: {
+  settings: {
     enabled: false,
   },
-  styles: [style],
+  stylesheets: [style],
 });
 
-export default builder;
+export default plugin;
 
 declare global {
-  interface PluginBuilderList {
-    [builder.id]: typeof builder;
+  interface PluginList {
+    [plugin.id]: typeof plugin;
   }
 }

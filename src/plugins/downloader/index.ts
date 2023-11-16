@@ -30,7 +30,7 @@ const builder = createPluginBuilder('downloader', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }

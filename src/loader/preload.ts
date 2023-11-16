@@ -1,30 +1,27 @@
 import { deepmerge } from 'deepmerge-ts';
 
 import {
-  PluginBaseConfig,
-  PluginDefinition,
-  PreloadPlugin,
-  PluginContext,
-  PreloadPluginFactory
-} from '../@types/plugin';
-import config from '../config';
+  BasePluginSettings,
+  PluginContext, PluginDef,
+  PreloadPluginContext,
+} from '@/@types/plugin';
+import config from '@/config';
 
-const allPluginFactoryList: Record<string, PreloadPluginFactory<PluginBaseConfig>> = {};
-const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};
+const allPlugins: Record<string, PluginDef<string, BasePluginSettings>> = {};
 const unregisterStyleMap: Record<string, (() => void)[]> = {};
-const loadedPluginMap: Record<string, PreloadPlugin<PluginBaseConfig>> = {};
+const loadedPluginMap: Record<string, PreloadPluginContext> = {};
 
 const createContext = <
-  Key extends keyof PluginBuilderList,
-  Config extends PluginBaseConfig = PluginBuilderList[Key]['config'],
->(id: Key): PluginContext<Config> => ({
-  getConfig: () => deepmerge(allPluginBuilders[id].config, config.get(`plugins.${id}`) ?? {}) as Config,
-  setConfig: (newConfig) => {
+  Key extends keyof PluginList,
+  Settings extends BasePluginSettings = PluginList[Key]['settings'],
+>(id: Key): PluginContext<Settings> => ({
+  getSettings: () => deepmerge(allPlugins[id].settings, config.get(`plugins.${id}`) ?? {}) as Settings,
+  setSettings: (newConfig) => {
     config.setPartial(`plugins.${id}`, newConfig);
   },
 });
 
-export const forceUnloadPreloadPlugin = (id: keyof PluginBuilderList) => {
+export const forceUnloadPreloadPlugin = (id: keyof PluginList) => {
   unregisterStyleMap[id]?.forEach((unregister) => unregister());
   delete unregisterStyleMap[id];
 
@@ -34,7 +31,7 @@ export const forceUnloadPreloadPlugin = (id: keyof PluginBuilderList) => {
   console.log('[YTMusic]', `"${id}" plugin is unloaded`);
 };
 
-export const forceLoadPreloadPlugin = async (id: keyof PluginBuilderList) => {
+export const forceLoadPreloadPlugin = async (id: keyof PluginList) => {
   try {
     const factory = allPluginFactoryList[id];
     if (!factory) return;
@@ -54,15 +51,15 @@ export const loadAllPreloadPlugins = async () => {
   const pluginConfigs = config.plugins.getPlugins();
 
   for (const [pluginId, builder] of Object.entries(allPluginBuilders)) {
-    const typedBuilder = builder as PluginBuilderList[keyof PluginBuilderList];
+    const typedBuilder = builder as PluginList[keyof PluginList];
 
-    const config = deepmerge(typedBuilder.config, pluginConfigs[pluginId as keyof PluginBuilderList] ?? {});
+    const config = deepmerge(typedBuilder.config, pluginConfigs[pluginId as keyof PluginList] ?? {});
 
     if (config.enabled) {
-      await forceLoadPreloadPlugin(pluginId as keyof PluginBuilderList);
+      await forceLoadPreloadPlugin(pluginId as keyof PluginList);
     } else {
-      if (loadedPluginMap[pluginId as keyof PluginBuilderList]) {
-        forceUnloadPreloadPlugin(pluginId as keyof PluginBuilderList);
+      if (loadedPluginMap[pluginId as keyof PluginList]) {
+        forceUnloadPreloadPlugin(pluginId as keyof PluginList);
       }
     }
   }
@@ -70,11 +67,11 @@ export const loadAllPreloadPlugins = async () => {
 
 export const unloadAllPreloadPlugins = () => {
   for (const id of Object.keys(loadedPluginMap)) {
-    forceUnloadPreloadPlugin(id as keyof PluginBuilderList);
+    forceUnloadPreloadPlugin(id as keyof PluginList);
   }
 };
 
-export const getLoadedPreloadPlugin = <Key extends keyof PluginBuilderList>(id: Key): PreloadPlugin<PluginBuilderList[Key]['config']> | undefined => {
+export const getLoadedPreloadPlugin = <Key extends keyof PluginList>(id: Key): PreloadPlugin<PluginList[Key]['config']> | undefined => {
   return loadedPluginMap[id];
 };
 export const getAllLoadedPreloadPlugins = () => {
@@ -82,8 +79,8 @@ export const getAllLoadedPreloadPlugins = () => {
 };
 export const registerPreloadPlugin = (
   id: string,
-  builder: PluginDefinition<string, PluginBaseConfig>,
-  factory?: PreloadPluginFactory<PluginBaseConfig>,
+  builder: PluginDefinition<string, BasePluginSettings>,
+  factory?: PreloadPluginFactory<BasePluginSettings>,
 ) => {
   if (factory) allPluginFactoryList[id] = factory;
   allPluginBuilders[id] = builder;

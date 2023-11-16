@@ -14,7 +14,7 @@ export type BasePluginSettings = {
 };
 export type PluginContext<Settings extends BasePluginSettings = BasePluginSettings> = {
   getSettings: () => MaybePromise<Settings>;
-  setSettings: (config: DeepPartial<Settings>) => MaybePromise<void>;
+  setSettings: <T extends Settings>(config: DeepPartial<T>) => MaybePromise<void>;
 };
 
 export type MainPluginContext<
@@ -23,6 +23,8 @@ export type MainPluginContext<
   send: <Arguments extends unknown[]>(event: string, ...args: Arguments) => void;
   handle: <Arguments extends unknown[], Return>(event: string, listener: (...args: Arguments) => MaybePromise<Return>) => void;
   on: <Arguments extends unknown[]>(event: string, listener: (...args: Arguments) => MaybePromise<void>) => void;
+
+  browserWindow: BrowserWindow;
 };
 export type RendererPluginContext<Settings extends BasePluginSettings = BasePluginSettings> = PluginContext<Settings> & {
   invoke: <Return>(event: string, ...args: unknown[]) => Promise<Return>;
@@ -30,19 +32,26 @@ export type RendererPluginContext<Settings extends BasePluginSettings = BasePlug
 };
 export type PreloadPluginContext<Settings extends BasePluginSettings = BasePluginSettings> = PluginContext<Settings>;
 export type MenuPluginContext<Settings extends BasePluginSettings = BasePluginSettings> = PluginContext<Settings> & {
-  window: BrowserWindow;
+  browserWindow: BrowserWindow;
 
   refresh: () => void;
 };
 
-type BasePluginLifecycle<Context> = {
+type BasePluginLifecycle<
+    Settings extends BasePluginSettings,
+    Context extends PluginContext<Settings>,
+> = {
   start?(ctx: Context): MaybePromise<void>;
   stop?(ctx: Context): MaybePromise<void>;
+  onConfigChange?(newConfig: Settings, oldConfig: Settings): MaybePromise<void>;
 };
-type MainPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<MainPluginContext<Settings>>;
-type PreloadPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<PreloadPluginContext<Settings>>;
-type RendererPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<RendererPluginContext<Settings>> & {
+type MainPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<Settings, MainPluginContext<Settings>>;
+type PreloadPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<Settings, PreloadPluginContext<Settings>>;
+type RendererPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<Settings, RendererPluginContext<Settings>> & {
   onPlayerApiReady?(api: YoutubePlayer): MaybePromise<void>;
+};
+type MenuPluginLifecycle<Settings extends BasePluginSettings> = {
+  getMenuItems?(ctx: MenuPluginContext<Settings>): MaybePromise<Electron.MenuItemConstructorOptions[]>;
 };
 
 type Author = string;
@@ -50,27 +59,29 @@ type Author = string;
 export interface PluginDef<
   ID extends string,
   Settings extends BasePluginSettings,
-  MainProperties extends Record<string, unknown>,
-  RendererProperties extends Record<string, unknown>,
+  MainProperties extends Record<string, unknown> = NonNullable<unknown>,
+  PreloadProperties extends Record<string, unknown> = NonNullable<unknown>,
+  RendererProperties extends Record<string, unknown> = NonNullable<unknown>,
 > {
   id: ID;
   name: string;
   authors?: Author[];
   description: string;
   restartNeeded: boolean;
-  menu?: Electron.MenuItemConstructorOptions[];
+  menu?: MenuPluginLifecycle<Settings>;
 
   settings: Settings;
 
   main?: {
     [key in keyof MainProperties]: MainProperties[key];
   } & MainPluginLifecycle<Settings>;
-  preload?: PreloadPluginLifecycle<Settings>
+  preload?: {
+    [key in keyof PreloadProperties]: PreloadProperties[key];
+  } & PreloadPluginLifecycle<Settings>
   renderer?: {
     [key in keyof RendererProperties]: RendererProperties[key];
-  } & RendererPluginLifecycle<Settings> & {
-    stylesheets?: string[];
-  };
+  } & RendererPluginLifecycle<Settings>;
+  stylesheets?: string[];
 }
 
 export const createPlugin = <

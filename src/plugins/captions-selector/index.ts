@@ -14,7 +14,7 @@ const builder = createPluginBuilder('captions-selector', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }

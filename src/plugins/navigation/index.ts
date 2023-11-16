@@ -14,7 +14,7 @@ const builder = createPluginBuilder('navigation', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }

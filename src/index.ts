@@ -13,7 +13,6 @@ import { deepmerge } from 'deepmerge-ts';
 import { deepEqual } from 'fast-equals';
 
 import { mainPlugins } from 'virtual:MainPlugins';
-import { pluginBuilders } from 'virtual:PluginBuilders';
 
 import config from './config';
 
@@ -35,7 +34,9 @@ import {
   loadAllMainPlugins,
   registerMainPlugin
 } from './loader/main';
-import { MainPluginFactory, PluginBaseConfig, PluginDefinition } from './@types/plugin';
+
+import type { PluginDef } from './@types/plugin';
+import { BasePluginSettings } from './@types/plugin';
 
 // Catch errors and log them
 unhandled({
@@ -97,7 +98,7 @@ ipcMain.handle('get-main-plugin-names', () => Object.keys(mainPlugins));
 
 
 const initHook = (win: BrowserWindow) => {
-  ipcMain.handle('get-config', (_, id: keyof PluginBuilderList) => deepmerge(pluginBuilders[id].config, config.get(`plugins.${id}`) ?? {}) as PluginBuilderList[typeof id]['config']);
+  ipcMain.handle('get-config', (_, id: keyof PluginList) => deepmerge(mainPlugins[id].settings, config.get(`plugins.${id}`) ?? {}) as PluginList[typeof id]['settings']);
   ipcMain.handle('set-config', (_, name: string, obj: object) => config.setPartial(`plugins.${name}`, obj));
 
   config.watch((newValue, oldValue) => {
@@ -108,22 +109,22 @@ const initHook = (win: BrowserWindow) => {
       const isEqual = deepEqual(oldPluginConfigList[id], newPluginConfig);
 
       if (!isEqual) {
-        const oldConfig = oldPluginConfigList[id] as PluginBaseConfig;
-        const config = deepmerge(pluginBuilders[id as keyof PluginBuilderList].config, newPluginConfig) as PluginBaseConfig;
+        const oldConfig = oldPluginConfigList[id] as BasePluginSettings;
+        const config = deepmerge(mainPlugins[id as keyof PluginList].settings, newPluginConfig) as BasePluginSettings;
 
         if (config.enabled !== oldConfig?.enabled) {
           if (config.enabled) {
             win.webContents.send('plugin:enable', id);
             ipcMain.emit('plugin:enable', id);
-            forceLoadMainPlugin(id as keyof PluginBuilderList, win);
+            forceLoadMainPlugin(id as keyof PluginList, win);
           } else {
             win.webContents.send('plugin:unload', id);
             ipcMain.emit('plugin:unload', id);
-            forceUnloadMainPlugin(id as keyof PluginBuilderList, win);
+            forceUnloadMainPlugin(id as keyof PluginList, win);
           }
 
-          if (pluginBuilders[id as keyof PluginBuilderList].restartNeeded) {
-            showNeedToRestartDialog(id as keyof PluginBuilderList);
+          if (mainPlugins[id as keyof PluginList].restartNeeded) {
+            showNeedToRestartDialog(id as keyof PluginList);
           }
         }
 
@@ -140,7 +141,7 @@ const initHook = (win: BrowserWindow) => {
   });
 };
 
-const showNeedToRestartDialog = (id: keyof PluginBuilderList) => {
+const showNeedToRestartDialog = (id: keyof PluginList) => {
   const builder = pluginBuilders[id];
   const dialogOptions: Electron.MessageBoxOptions = {
     type: 'info',
@@ -191,13 +192,6 @@ function initTheme(win: BrowserWindow) {
       );
     }
   }
-
-  win.webContents.once('did-finish-load', () => {
-    if (is.dev()) {
-      console.log('[YTMusic]', 'did finish load');
-      win.webContents.openDevTools();
-    }
-  });
 }
 
 async function createMainWindow() {
@@ -242,8 +236,8 @@ async function createMainWindow() {
   initTheme(win);
 
   Object.entries(pluginBuilders).forEach(([id, builder]) => {
-    const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
-    const plugin = mainPlugins[id] as MainPluginFactory<PluginBaseConfig> | undefined;
+    const typedBuilder = builder as PluginDefinition<string, BasePluginSettings>;
+    const plugin = mainPlugins[id] as MainPluginFactory<BasePluginSettings> | undefined;
 
     registerMainPlugin(id, typedBuilder, plugin);
   });
@@ -334,6 +328,13 @@ async function createMainWindow() {
   win.once('ready-to-show', () => {
     if (config.get('options.appVisible')) {
       win.show();
+    }
+  });
+
+  win.webContents.once('did-finish-load', () => {
+    if (is.dev()) {
+      console.log('[YTMusic]', 'did finish load');
+      win.webContents.openDevTools();
     }
   });
 

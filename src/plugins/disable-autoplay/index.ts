@@ -17,7 +17,7 @@ const builder = createPluginBuilder('disable-autoplay', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }

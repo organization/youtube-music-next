@@ -7,7 +7,7 @@ import { preloadPlugins } from 'virtual:PreloadPlugins';
 import config from './config';
 
 import {
-  PluginBaseConfig,
+  BasePluginSettings,
   PluginDefinition,
   PreloadPluginFactory
 } from './@types/plugin';
@@ -19,17 +19,17 @@ import {
 } from './loader/preload';
 
 Object.entries(pluginBuilders).forEach(([id, builder]) => {
-  const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
-  const plugin = preloadPlugins[id] as PreloadPluginFactory<PluginBaseConfig> | undefined;
+  const typedBuilder = builder as PluginDefinition<string, BasePluginSettings>;
+  const plugin = preloadPlugins[id] as PreloadPluginFactory<BasePluginSettings> | undefined;
 
   registerPreloadPlugin(id, typedBuilder, plugin);
 });
 loadAllPreloadPlugins();
 
-ipcRenderer.on('plugin:unload', (_, id: keyof PluginBuilderList) => {
+ipcRenderer.on('plugin:unload', (_, id: keyof PluginList) => {
   forceUnloadPreloadPlugin(id);
 });
-ipcRenderer.on('plugin:enable', (_, id: keyof PluginBuilderList) => {
+ipcRenderer.on('plugin:enable', (_, id: keyof PluginList) => {
   forceLoadPreloadPlugin(id);
 });
 

@@ -11,7 +11,7 @@ const builder = createPluginBuilder('playback-speed', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }

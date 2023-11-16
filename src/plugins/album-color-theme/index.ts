@@ -14,7 +14,7 @@ const builder = createPluginBuilder('album-color-theme', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }

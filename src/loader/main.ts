@@ -2,27 +2,25 @@ import { BrowserWindow, ipcMain } from 'electron';
 
 import { deepmerge } from 'deepmerge-ts';
 
-import config from '../config';
-import { injectCSS } from '../plugins/utils/main';
+import { injectCSS } from '@/plugins/utils/main';
 import {
-  MainPlugin,
   MainPluginContext,
-  MainPluginFactory,
-  PluginBaseConfig,
-  PluginDefinition
-} from '../@types/plugin';
+  BasePluginSettings, PluginDef,
+} from '@/@types/plugin';
 
-const allPluginFactoryList: Record<string, MainPluginFactory<PluginBaseConfig>> = {};
-const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};
+import config from '../config';
+
+const allPlugins: Record<string, PluginDef<string, BasePluginSettings>> = {};
 const unregisterStyleMap: Record<string, (() => void)[]> = {};
-const loadedPluginMap: Record<string, MainPlugin<PluginBaseConfig>> = {};
+const loadedPluginMap: Record<string, PluginDef<string, BasePluginSettings>> = {};
+const loadedContextMap: Record<string, MainPluginContext<BasePluginSettings>> = {};
 
 const createContext = <
-  Key extends keyof PluginBuilderList,
-  Config extends PluginBaseConfig = PluginBuilderList[Key]['config'],
->(id: Key, win: BrowserWindow): MainPluginContext<Config> => ({
-  getConfig: () => deepmerge(allPluginBuilders[id].config, config.get(`plugins.${id}`) ?? {}) as Config,
-  setConfig: (newConfig) => {
+  Key extends keyof PluginList,
+  Settings extends BasePluginSettings = PluginList[Key]['settings'],
+>(id: Key, win: BrowserWindow): MainPluginContext<Settings> => ({
+  getSettings: () => deepmerge(allPlugins[id].settings, config.get(`plugins.${id}`) ?? {}) as Settings,
+  setSettings: (newConfig) => {
     config.setPartial(`plugins.${id}`, newConfig);
   },
 
@@ -35,23 +33,27 @@ const createContext = <
   on: (event: string, listener) => {
     ipcMain.on(event, async (_, ...args) => listener(...args as never));
   },
+  browserWindow: win,
 });
 
-export const forceUnloadMainPlugin = (id: keyof PluginBuilderList, win: BrowserWindow) => {
+export const forceUnloadMainPlugin = (id: keyof PluginList) => {
   unregisterStyleMap[id]?.forEach((unregister) => unregister());
   delete unregisterStyleMap[id];
 
-  loadedPluginMap[id]?.onUnload?.(win);
+  if (Object.hasOwn(loadedContextMap, id)) {
+    loadedPluginMap[id]?.main?.stop?.(loadedContextMap[id]);
+    delete loadedContextMap[id];
+  }
   delete loadedPluginMap[id];
 
   console.log('[YTMusic]', `"${id}" plugin is unloaded`);
 };
 
-export const forceLoadMainPlugin = async (id: keyof PluginBuilderList, win: BrowserWindow) => {
-  const builder = allPluginBuilders[id];
+export const forceLoadMainPlugin = async (id: keyof PluginList, win: BrowserWindow) => {
+  const builder = allPlugins[id];
 
   Promise.allSettled(
-    builder.styles?.map(async (style) => {
+    builder.stylesheets?.map(async (style) => {
       const unregister = await injectCSS(win.webContents, style);
       console.log('[YTMusic]', `Injected CSS for "${id}" plugin`);
 
@@ -74,14 +76,9 @@ export const forceLoadMainPlugin = async (id: keyof PluginBuilderList, win: Brow
   });
 
   try {
-    const factory = allPluginFactoryList[id];
-    if (!factory) return;
-
     const context = createContext(id, win);
-    const plugin = await factory(context);
-    loadedPluginMap[id] = plugin;
-    plugin.onLoad?.(win);
-
+    loadedContextMap[id] = context;
+    await allPlugins[id]?.main?.start?.(context);
     console.log('[YTMusic]', `"${id}" plugin is loaded`);
   } catch (err) {
     console.log('[YTMusic]', `Cannot initialize "${id}" plugin: ${String(err)}`);
@@ -91,28 +88,26 @@ export const forceLoadMainPlugin = async (id: keyof PluginBuilderList, win: Brow
 export const loadAllMainPlugins = async (win: BrowserWindow) => {
   const pluginConfigs = config.plugins.getPlugins();
 
-  for (const [pluginId, builder] of Object.entries(allPluginBuilders)) {
-    const typedBuilder = builder as PluginBuilderList[keyof PluginBuilderList];
-
-    const config = deepmerge(typedBuilder.config, pluginConfigs[pluginId as keyof PluginBuilderList] ?? {});
+  for (const [pluginId, pluginDef] of Object.entries(allPlugins)) {
+    const config = deepmerge(pluginDef.settings, pluginConfigs[pluginId] ?? {}) as BasePluginSettings;
 
     if (config.enabled) {
-      await forceLoadMainPlugin(pluginId as keyof PluginBuilderList, win);
+      await forceLoadMainPlugin(pluginId as keyof PluginList, win);
     } else {
-      if (loadedPluginMap[pluginId as keyof PluginBuilderList]) {
-        forceUnloadMainPlugin(pluginId as keyof PluginBuilderList, win);
+      if (loadedPluginMap[pluginId as keyof PluginList]) {
+        forceUnloadMainPlugin(pluginId as keyof PluginList);
       }
     }
   }
 };
 
-export const unloadAllMainPlugins = (win: BrowserWindow) => {
+export const unloadAllMainPlugins = () => {
   for (const id of Object.keys(loadedPluginMap)) {
-    forceUnloadMainPlugin(id as keyof PluginBuilderList, win);
+    forceUnloadMainPlugin(id as keyof PluginList);
   }
 };
 
-export const getLoadedMainPlugin = <Key extends keyof PluginBuilderList>(id: Key): MainPlugin<PluginBuilderList[Key]['config']> | undefined => {
+export const getLoadedMainPlugin = <Key extends keyof PluginList>(id: Key) => {
   return loadedPluginMap[id];
 };
 export const getAllLoadedMainPlugins = () => {
@@ -120,9 +115,7 @@ export const getAllLoadedMainPlugins = () => {
 };
 export const registerMainPlugin = (
   id: string,
-  builder: PluginDefinition<string, PluginBaseConfig>,
-  factory?: MainPluginFactory<PluginBaseConfig>,
+  pluginDef: PluginDef<string, BasePluginSettings>,
 ) => {
-  if (factory) allPluginFactoryList[id] = factory;
-  allPluginBuilders[id] = builder;
+  allPlugins[id] = pluginDef;
 };

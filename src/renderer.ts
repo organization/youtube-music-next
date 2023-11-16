@@ -1,7 +1,7 @@
 import { rendererPlugins } from 'virtual:RendererPlugins';
 import { pluginBuilders } from 'virtual:PluginBuilders';
 
-import { PluginBaseConfig, PluginDefinition, RendererPluginFactory } from './@types/plugin';
+import { BasePluginSettings, PluginDefinition, RendererPluginFactory } from './@types/plugin';
 
 import { startingPages } from './providers/extracted-data';
 import setupSongInfo from './providers/song-info-front';
@@ -113,17 +113,17 @@ function onApiLoaded() {
 
 (async () => {
   Object.entries(pluginBuilders).forEach(([id, builder]) => {
-    const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
-    const plugin = rendererPlugins[id] as RendererPluginFactory<PluginBaseConfig> | undefined;
+    const typedBuilder = builder as PluginDefinition<string, BasePluginSettings>;
+    const plugin = rendererPlugins[id] as RendererPluginFactory<BasePluginSettings> | undefined;
 
     registerRendererPlugin(id, typedBuilder, plugin);
   });
   await loadAllRendererPlugins();
 
-  window.ipcRenderer.on('plugin:unload', (_event, id: keyof PluginBuilderList) => {
+  window.ipcRenderer.on('plugin:unload', (_event, id: keyof PluginList) => {
     forceUnloadRendererPlugin(id);
   });
-  window.ipcRenderer.on('plugin:enable', async (_event, id: keyof PluginBuilderList) => {
+  window.ipcRenderer.on('plugin:enable', async (_event, id: keyof PluginList) => {
     await forceLoadRendererPlugin(id);
     if (api) {
       const plugin = getLoadedRendererPlugin(id);
@@ -132,7 +132,7 @@ function onApiLoaded() {
     }
   });
 
-  window.ipcRenderer.on('config-changed', (_event, id: string, newConfig: PluginBaseConfig) => {
+  window.ipcRenderer.on('config-changed', (_event, id: string, newConfig: BasePluginSettings) => {
     const plugin = getAllLoadedRendererPlugins()[id];
 
     if (plugin) plugin.onConfigChange?.(newConfig);

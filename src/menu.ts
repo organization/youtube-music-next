@@ -15,7 +15,7 @@ import promptOptions from './providers/prompt-options';
 import { getAvailablePluginNames } from './plugins/utils/main';
 import {
   MenuPluginFactory,
-  PluginBaseConfig,
+  BasePluginSettings,
   PluginDefinition
 } from './@types/plugin';
 import { getAllMenuTemplate, loadAllMenuPlugins, registerMenuPlugin } from './loader/menu';
@@ -50,8 +50,8 @@ export const refreshMenu = (win: BrowserWindow) => {
 };
 
 Object.entries(pluginBuilders).forEach(([id, builder]) => {
-  const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
-  const plugin = menuList[id] as MenuPluginFactory<PluginBaseConfig> | undefined;
+  const typedBuilder = builder as PluginDefinition<string, BasePluginSettings>;
+  const plugin = menuList[id] as MenuPluginFactory<BasePluginSettings> | undefined;
 
   registerMenuPlugin(id, typedBuilder, plugin);
 });
@@ -62,7 +62,7 @@ export const mainMenuTemplate = async (win: BrowserWindow): Promise<MenuTemplate
   await loadAllMenuPlugins(win);
 
   const menuResult = Object.entries(getAllMenuTemplate()).map(([id, template]) => {
-    const pluginLabel = (pluginBuilders[id as keyof PluginBuilderList])?.name ?? id;
+    const pluginLabel = (pluginBuilders[id as keyof PluginList])?.name ?? id;
 
     if (!config.plugins.isEnabled(id)) {
       return [
@@ -89,7 +89,7 @@ export const mainMenuTemplate = async (win: BrowserWindow): Promise<MenuTemplate
     const predefinedTemplate = menuResult.find((it) => it[0] === id);
     if (predefinedTemplate) return predefinedTemplate[1];
 
-    const pluginLabel = pluginBuilders[id as keyof PluginBuilderList]?.name ?? id;
+    const pluginLabel = pluginBuilders[id as keyof PluginList]?.name ?? id;
 
     return pluginEnabledMenu(id, pluginLabel, true, innerRefreshMenu);
   });

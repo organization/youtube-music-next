@@ -44,7 +44,7 @@ const builder = createPluginBuilder('last-fm', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }

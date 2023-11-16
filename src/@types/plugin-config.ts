@@ -1,1 +1,1 @@
-export type PluginConfig<T extends keyof PluginBuilderList> = PluginBuilderList[T]['settings'];
+export type PluginConfig<T extends keyof PluginList> = PluginList[T]['settings'];

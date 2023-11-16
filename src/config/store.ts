@@ -155,7 +155,7 @@ export default new Store({
       .entries(pluginBuilders)
       .reduce((prev, [id, builder]) => ({
         ...prev,
-        [id]: (builder as PluginBuilderList[keyof PluginBuilderList]).config,
+        [id]: (builder as PluginList[keyof PluginList]).config,
       }), {}),
   },
   clearInvalidConfig: false,

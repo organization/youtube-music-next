@@ -3,14 +3,14 @@ import store from './store';
 
 import { restart } from '../providers/app-controls';
 
-import type { PluginBaseConfig } from '../@types/plugin';
+import type { BasePluginSettings } from '../@types/plugin';
 
 export function getPlugins() {
-  return store.get('plugins') as Record<string, PluginBaseConfig>;
+  return store.get('plugins') as Record<string, BasePluginSettings>;
 }
 
 export function isEnabled(plugin: string) {
-  const pluginConfig = (store.get('plugins') as Record<string, PluginBaseConfig>)[plugin];
+  const pluginConfig = (store.get('plugins') as Record<string, BasePluginSettings>)[plugin];
   return pluginConfig !== undefined && pluginConfig.enabled;
 }
 

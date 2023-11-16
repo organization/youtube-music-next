@@ -34,7 +34,7 @@ const builder = createPluginBuilder('picture-in-picture', {
 export default builder;
 
 declare global {
-  interface PluginBuilderList {
+  interface PluginList {
     [builder.id]: typeof builder;
   }
 }
