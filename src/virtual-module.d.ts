@@ -1,23 +1,23 @@
 declare module 'virtual:MainPlugins' {
-  import type { MainPluginFactory, PluginBaseConfig } from './@types/plugin';
+  import type { PluginDef } from './@types/plugin';
 
-  export const mainPlugins: Record<string, MainPluginFactory<PluginBaseConfig>>;
+  export const mainPlugins: Record<string, PluginDef>;
 }
 
 declare module 'virtual:MenuPlugins' {
-  import type { MenuPluginFactory, PluginBaseConfig } from './@types/plugin';
+  import type { PluginDef } from './@types/plugin';
 
-  export const menuPlugins: Record<string, MenuPluginFactory<PluginBaseConfig>>;
+  export const menuPlugins: Record<string, PluginDef>;
 }
 
 declare module 'virtual:PreloadPlugins' {
-  import type { PreloadPluginFactory, PluginBaseConfig } from './@types/plugin';
+  import type { PluginDef } from './@types/plugin';
 
-  export const preloadPlugins: Record<string, PreloadPluginFactory<PluginBaseConfig>>;
+  export const preloadPlugins: Record<string, PluginDef>;
 }
 
 declare module 'virtual:RendererPlugins' {
-  import type { RendererPluginFactory, PluginBaseConfig } from './@types/plugin';
+  import type { PluginDef } from './@types/plugin';
 
-  export const rendererPlugins: Record<string, RendererPluginFactory<PluginBaseConfig>>;
+  export const rendererPlugins: Record<string, PluginDef>;
 }
