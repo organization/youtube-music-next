@@ -1,13 +1,13 @@
 import { deepmerge } from 'deepmerge-ts';
 
-import { MenuPluginContext, MenuPluginFactory, PluginBaseConfig, PluginBuilder } from '../plugins/utils/builder';
+import { MenuPluginContext, MenuPluginFactory, PluginBaseConfig, PluginDefinition } from '../plugins/utils/builder';
 import config from '../config';
 import { setApplicationMenu } from '../menu';
 
 import type { BrowserWindow, MenuItemConstructorOptions } from 'electron';
 
 const allPluginFactoryList: Record<string, MenuPluginFactory<PluginBaseConfig>> = {};
-const allPluginBuilders: Record<string, PluginBuilder<string, PluginBaseConfig>> = {};
+const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};
 const menuTemplateMap: Record<string, MenuItemConstructorOptions[]> = {};
 
 const createContext = <
@@ -64,7 +64,7 @@ export const getAllMenuTemplate = () => {
 };
 export const registerMenuPlugin = (
   id: string,
-  builder: PluginBuilder<string, PluginBaseConfig>,
+  builder: PluginDefinition<string, PluginBaseConfig>,
   factory?: MenuPluginFactory<PluginBaseConfig>,
 ) => {
   if (factory) allPluginFactoryList[id] = factory;

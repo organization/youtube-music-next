@@ -1,88 +1,85 @@
 import type {
   BrowserWindow,
-  MenuItemConstructorOptions,
 } from 'electron';
+
 import type { YoutubePlayer } from '../../types/youtube-player';
 
-export type PluginBaseConfig = {
+type DeepPartial<T> = T extends object ? {
+  [P in keyof T]?: DeepPartial<T[P]>;
+} : T;
+type MaybePromise<T> = T | Promise<T>;
+
+export type BasePluginSettings = {
   enabled: boolean;
 };
-export type BasePlugin<Config extends PluginBaseConfig> = {
-  onLoad?: () => void;
-  onUnload?: () => void;
-  onConfigChange?: (newConfig: Config) => void;
-}
-export type RendererPlugin<Config extends PluginBaseConfig> = BasePlugin<Config> & {
-  onPlayerApiReady?: (api: YoutubePlayer) => void;
-};
-export type MainPlugin<Config extends PluginBaseConfig> = Omit<BasePlugin<Config>, 'onLoad' | 'onUnload'> & {
-  onLoad?: (window: BrowserWindow) => void;
-  onUnload?: (window: BrowserWindow) => void;
-};
-export type PreloadPlugin<Config extends PluginBaseConfig> = BasePlugin<Config>;
-
-type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
-};
-type IF<T> = (args: T) => T;
-type Promisable<T> = T | Promise<T>;
-
-export type PluginContext<Config extends PluginBaseConfig = PluginBaseConfig> = {
-  getConfig: () => Promisable<Config>;
-  setConfig: (config: DeepPartial<Config>) => Promisable<void>;
+export type PluginContext<Settings extends BasePluginSettings = BasePluginSettings> = {
+  getSettings: () => MaybePromise<Settings>;
+  setSettings: (config: DeepPartial<Settings>) => MaybePromise<void>;
 };
 
-export type MainPluginContext<Config extends PluginBaseConfig = PluginBaseConfig> = PluginContext<Config> & {
-  send: (event: string, ...args: unknown[]) => void;
-  handle: <Arguments extends unknown[], Return>(event: string, listener: (...args: Arguments) => Promisable<Return>) => void;
-  on: <Arguments extends unknown[]>(event: string, listener: (...args: Arguments) => Promisable<void>) => void;
+export type MainPluginContext<
+  Settings extends BasePluginSettings,
+> = PluginContext<Settings> & {
+  send: <Arguments extends unknown[]>(event: string, ...args: Arguments) => void;
+  handle: <Arguments extends unknown[], Return>(event: string, listener: (...args: Arguments) => MaybePromise<Return>) => void;
+  on: <Arguments extends unknown[]>(event: string, listener: (...args: Arguments) => MaybePromise<void>) => void;
 };
-export type RendererPluginContext<Config extends PluginBaseConfig = PluginBaseConfig> = PluginContext<Config> & {
+export type RendererPluginContext<Settings extends BasePluginSettings = BasePluginSettings> = PluginContext<Settings> & {
   invoke: <Return>(event: string, ...args: unknown[]) => Promise<Return>;
-  on: <Arguments extends unknown[]>(event: string, listener: (...args: Arguments) => Promisable<void>) => void;
+  on: <Arguments extends unknown[]>(event: string, listener: (...args: Arguments) => MaybePromise<void>) => void;
 };
-export type MenuPluginContext<Config extends PluginBaseConfig = PluginBaseConfig> = PluginContext<Config> & {
+export type PreloadPluginContext<Settings extends BasePluginSettings = BasePluginSettings> = PluginContext<Settings>;
+export type MenuPluginContext<Settings extends BasePluginSettings = BasePluginSettings> = PluginContext<Settings> & {
   window: BrowserWindow;
 
   refresh: () => void;
 };
 
-export type RendererPluginFactory<Config extends PluginBaseConfig> = (context: RendererPluginContext<Config>) => Promisable<RendererPlugin<Config>>;
-export type MainPluginFactory<Config extends PluginBaseConfig> = (context: MainPluginContext<Config>) => Promisable<MainPlugin<Config>>;
-export type PreloadPluginFactory<Config extends PluginBaseConfig> = (context: PluginContext<Config>) => Promisable<PreloadPlugin<Config>>;
-export type MenuPluginFactory<Config extends PluginBaseConfig> = (context: MenuPluginContext<Config>) => Promisable<MenuItemConstructorOptions[]>;
-
-export type PluginBuilder<ID extends string, Config extends PluginBaseConfig> = {
-  createRenderer: IF<RendererPluginFactory<Config>>;
-  createMain: IF<MainPluginFactory<Config>>;
-  createPreload: IF<PreloadPluginFactory<Config>>;
-  createMenu: IF<MenuPluginFactory<Config>>;
-
-  id: ID;
-  config: Config;
-  name?: string;
-  styles?: string[];
-  restartNeeded: boolean;
+type BasePluginLifecycle<Context> = {
+  start?(ctx: Context): MaybePromise<void>;
+  stop?(ctx: Context): MaybePromise<void>;
 };
-export type PluginBuilderOptions<Config extends PluginBaseConfig = PluginBaseConfig> = {
-  name?: string;
+type MainPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<MainPluginContext<Settings>>;
+type PreloadPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<PreloadPluginContext<Settings>>;
+type RendererPluginLifecycle<Settings extends BasePluginSettings> = BasePluginLifecycle<RendererPluginContext<Settings>> & {
+  onPlayerApiReady?(api: YoutubePlayer): MaybePromise<void>;
+};
+
+type Author = string;
+
+export interface PluginDef<
+  ID extends string,
+  Settings extends BasePluginSettings,
+  MainProperties extends Record<string, unknown>,
+  RendererProperties extends Record<string, unknown>,
+> {
+  id: ID;
+  name: string;
+  authors?: Author[];
+  description: string;
   restartNeeded: boolean;
+  menu?: Electron.MenuItemConstructorOptions[];
 
-  config: Config;
-  styles?: string[];
+  settings: Settings;
+
+  main?: {
+    [key in keyof MainProperties]: MainProperties[key];
+  } & MainPluginLifecycle<Settings>;
+  preload?: PreloadPluginLifecycle<Settings>
+  renderer?: {
+    [key in keyof RendererProperties]: RendererProperties[key];
+  } & RendererPluginLifecycle<Settings> & {
+    stylesheets?: string[];
+  };
 }
-export const createPluginBuilder = <ID extends string, Config extends PluginBaseConfig>(
-  id: ID,
-  options: PluginBuilderOptions<Config>,
-): PluginBuilder<ID, Omit<Config, 'enabled'> & PluginBaseConfig> => ({
-  createRenderer: (plugin) => plugin,
-  createMain: (plugin) => plugin,
-  createPreload: (plugin) => plugin,
-  createMenu: (plugin) => plugin,
 
-  id,
-  name: options.name,
-  config: options.config,
-  styles: options.styles,
-  restartNeeded: options.restartNeeded,
-});
+export const createPlugin = <
+  ID extends string,
+  Settings extends BasePluginSettings,
+  MainProperties extends Record<string, unknown>,
+  RendererProperties extends Record<string, unknown>,
+>(
+  def: Omit<PluginDef<ID, Settings, MainProperties, RendererProperties>, 'settings'> & {
+    settings?: Settings & { enabled: boolean };
+  },
+): PluginDef<ID, Settings, MainProperties, RendererProperties> => def as PluginDef<ID, Settings, MainProperties, RendererProperties>;

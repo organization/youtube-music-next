@@ -2,7 +2,7 @@ import { deepmerge } from 'deepmerge-ts';
 
 import {
   PluginBaseConfig,
-  PluginBuilder,
+  PluginDefinition,
   PreloadPlugin,
   PluginContext,
   PreloadPluginFactory
@@ -10,7 +10,7 @@ import {
 import config from '../config';
 
 const allPluginFactoryList: Record<string, PreloadPluginFactory<PluginBaseConfig>> = {};
-const allPluginBuilders: Record<string, PluginBuilder<string, PluginBaseConfig>> = {};
+const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};
 const unregisterStyleMap: Record<string, (() => void)[]> = {};
 const loadedPluginMap: Record<string, PreloadPlugin<PluginBaseConfig>> = {};
 
@@ -82,7 +82,7 @@ export const getAllLoadedPreloadPlugins = () => {
 };
 export const registerPreloadPlugin = (
   id: string,
-  builder: PluginBuilder<string, PluginBaseConfig>,
+  builder: PluginDefinition<string, PluginBaseConfig>,
   factory?: PreloadPluginFactory<PluginBaseConfig>,
 ) => {
   if (factory) allPluginFactoryList[id] = factory;

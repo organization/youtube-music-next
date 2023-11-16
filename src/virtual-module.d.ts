@@ -21,7 +21,3 @@ declare module 'virtual:RendererPlugins' {
 
   export const rendererPlugins: Record<string, RendererPluginFactory<PluginBaseConfig>>;
 }
-
-declare module 'virtual:PluginBuilders' {
-  export const pluginBuilders: PluginBuilderList;
-}

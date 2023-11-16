@@ -1,14 +1,14 @@
 import { deepmerge } from 'deepmerge-ts';
 
 import {
-  PluginBaseConfig, PluginBuilder,
+  PluginBaseConfig, PluginDefinition,
   RendererPlugin,
   RendererPluginContext,
   RendererPluginFactory
 } from '../plugins/utils/builder';
 
 const allPluginFactoryList: Record<string, RendererPluginFactory<PluginBaseConfig>> = {};
-const allPluginBuilders: Record<string, PluginBuilder<string, PluginBaseConfig>> = {};
+const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};
 const unregisterStyleMap: Record<string, (() => void)[]> = {};
 const loadedPluginMap: Record<string, RendererPlugin<PluginBaseConfig>> = {};
 
@@ -89,7 +89,7 @@ export const getAllLoadedRendererPlugins = () => {
 };
 export const registerRendererPlugin = (
   id: string,
-  builder: PluginBuilder<string, PluginBaseConfig>,
+  builder: PluginDefinition<string, PluginBaseConfig>,
   factory?: RendererPluginFactory<PluginBaseConfig>,
 ) => {
   if (factory) allPluginFactoryList[id] = factory;

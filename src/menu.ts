@@ -1,5 +1,9 @@
 import is from 'electron-is';
 import { app, BrowserWindow, clipboard, dialog, Menu } from 'electron';
+
+
+import { menuPlugins as menuList } from 'virtual:MenuPlugins';
+
 import prompt from 'custom-electron-prompt';
 
 import { restart } from './providers/app-controls';
@@ -7,16 +11,12 @@ import config from './config';
 import { startingPages } from './providers/extracted-data';
 import promptOptions from './providers/prompt-options';
 
-/* eslint-disable import/order */
-import { menuPlugins as menuList } from 'virtual:MenuPlugins';
-import { pluginBuilders } from 'virtual:PluginBuilders';
-/* eslint-enable import/order */
 
 import { getAvailablePluginNames } from './plugins/utils/main';
 import {
   MenuPluginFactory,
   PluginBaseConfig,
-  PluginBuilder
+  PluginDefinition
 } from './plugins/utils/builder';
 import { getAllMenuTemplate, loadAllMenuPlugins, registerMenuPlugin } from './loader/menu';
 
@@ -50,7 +50,7 @@ export const refreshMenu = (win: BrowserWindow) => {
 };
 
 Object.entries(pluginBuilders).forEach(([id, builder]) => {
-  const typedBuilder = builder as PluginBuilder<string, PluginBaseConfig>;
+  const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
   const plugin = menuList[id] as MenuPluginFactory<PluginBaseConfig> | undefined;
 
   registerMenuPlugin(id, typedBuilder, plugin);

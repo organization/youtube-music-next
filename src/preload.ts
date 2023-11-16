@@ -8,7 +8,7 @@ import config from './config';
 
 import {
   PluginBaseConfig,
-  PluginBuilder,
+  PluginDefinition,
   PreloadPluginFactory
 } from './plugins/utils/builder';
 import {
@@ -19,7 +19,7 @@ import {
 } from './loader/preload';
 
 Object.entries(pluginBuilders).forEach(([id, builder]) => {
-  const typedBuilder = builder as PluginBuilder<string, PluginBaseConfig>;
+  const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
   const plugin = preloadPlugins[id] as PreloadPluginFactory<PluginBaseConfig> | undefined;
 
   registerPreloadPlugin(id, typedBuilder, plugin);

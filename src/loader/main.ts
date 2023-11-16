@@ -9,11 +9,11 @@ import {
   MainPluginContext,
   MainPluginFactory,
   PluginBaseConfig,
-  PluginBuilder
+  PluginDefinition
 } from '../plugins/utils/builder';
 
 const allPluginFactoryList: Record<string, MainPluginFactory<PluginBaseConfig>> = {};
-const allPluginBuilders: Record<string, PluginBuilder<string, PluginBaseConfig>> = {};
+const allPluginBuilders: Record<string, PluginDefinition<string, PluginBaseConfig>> = {};
 const unregisterStyleMap: Record<string, (() => void)[]> = {};
 const loadedPluginMap: Record<string, MainPlugin<PluginBaseConfig>> = {};
 
@@ -120,7 +120,7 @@ export const getAllLoadedMainPlugins = () => {
 };
 export const registerMainPlugin = (
   id: string,
-  builder: PluginBuilder<string, PluginBaseConfig>,
+  builder: PluginDefinition<string, PluginBaseConfig>,
   factory?: MainPluginFactory<PluginBaseConfig>,
 ) => {
   if (factory) allPluginFactoryList[id] = factory;

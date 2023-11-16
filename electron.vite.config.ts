@@ -1,17 +1,25 @@
+import path from 'node:path';
+
 import { defineConfig, defineViteConfig } from 'electron-vite';
 import builtinModules from 'builtin-modules';
 import viteResolve from 'vite-plugin-resolve';
 
-import { pluginVirtualModuleGenerator } from './vite-plugins/plugin-virtual-module-generator';
+import { pluginVirtualModuleGenerator } from './vite-plugins/plugin-importer';
+import pluginLoader from './vite-plugins/plugin-loader';
 
 import type { UserConfig } from 'vite';
+
+const resolveAlias = {
+  '@': path.join(__dirname, './src'),
+  '@assets': path.join(__dirname, './assets'),
+};
 
 export default defineConfig({
   main: defineViteConfig(({ mode }) => {
     const commonConfig: UserConfig = {
       plugins: [
+        pluginLoader('main'),
         viteResolve({
-          'virtual:PluginBuilders': pluginVirtualModuleGenerator('index'),
           'virtual:MainPlugins': pluginVirtualModuleGenerator('main'),
           'virtual:MenuPlugins': pluginVirtualModuleGenerator('menu'),
         }),
@@ -31,6 +39,9 @@ export default defineConfig({
           input: './src/index.ts',
         },
       },
+      resolve: {
+        alias: resolveAlias,
+      },
     };
 
     if (mode === 'development') {
@@ -49,8 +60,8 @@ export default defineConfig({
   preload: defineViteConfig(({ mode }) => {
     const commonConfig: UserConfig = {
       plugins: [
+        pluginLoader('preload'),
         viteResolve({
-          'virtual:PluginBuilders': pluginVirtualModuleGenerator('index'),
           'virtual:PreloadPlugins': pluginVirtualModuleGenerator('preload'),
         }),
       ],
@@ -68,6 +79,9 @@ export default defineConfig({
           input: './src/preload.ts',
         }
       },
+      resolve: {
+        alias: resolveAlias,
+      }
     };
 
     if (mode === 'development') {
@@ -86,8 +100,8 @@ export default defineConfig({
   renderer: defineViteConfig(({ mode }) => {
     const commonConfig: UserConfig = {
       plugins: [
+        pluginLoader('renderer'),
         viteResolve({
-          'virtual:PluginBuilders': pluginVirtualModuleGenerator('index'),
           'virtual:RendererPlugins': pluginVirtualModuleGenerator('renderer'),
         }),
       ],
@@ -107,6 +121,9 @@ export default defineConfig({
           input: './src/index.html',
         },
       },
+      resolve: {
+        alias: resolveAlias,
+      }
     };
 
     if (mode === 'development') {

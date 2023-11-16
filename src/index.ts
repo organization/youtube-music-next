@@ -35,7 +35,7 @@ import {
   loadAllMainPlugins,
   registerMainPlugin
 } from './loader/main';
-import { MainPluginFactory, PluginBaseConfig, PluginBuilder } from './plugins/utils/builder';
+import { MainPluginFactory, PluginBaseConfig, PluginDefinition } from './plugins/utils/builder';
 
 // Catch errors and log them
 unhandled({
@@ -242,7 +242,7 @@ async function createMainWindow() {
   initTheme(win);
 
   Object.entries(pluginBuilders).forEach(([id, builder]) => {
-    const typedBuilder = builder as PluginBuilder<string, PluginBaseConfig>;
+    const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
     const plugin = mainPlugins[id] as MainPluginFactory<PluginBaseConfig> | undefined;
 
     registerMainPlugin(id, typedBuilder, plugin);

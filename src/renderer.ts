@@ -1,7 +1,7 @@
 import { rendererPlugins } from 'virtual:RendererPlugins';
 import { pluginBuilders } from 'virtual:PluginBuilders';
 
-import { PluginBaseConfig, PluginBuilder, RendererPluginFactory } from './plugins/utils/builder';
+import { PluginBaseConfig, PluginDefinition, RendererPluginFactory } from './plugins/utils/builder';
 
 import { startingPages } from './providers/extracted-data';
 import setupSongInfo from './providers/song-info-front';
@@ -113,7 +113,7 @@ function onApiLoaded() {
 
 (async () => {
   Object.entries(pluginBuilders).forEach(([id, builder]) => {
-    const typedBuilder = builder as PluginBuilder<string, PluginBaseConfig>;
+    const typedBuilder = builder as PluginDefinition<string, PluginBaseConfig>;
     const plugin = rendererPlugins[id] as RendererPluginFactory<PluginBaseConfig> | undefined;
 
     registerRendererPlugin(id, typedBuilder, plugin);
