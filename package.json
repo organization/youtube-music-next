@@ -158,7 +158,7 @@
     "simple-youtube-age-restriction-bypass": "git+https://github.com/organization/Simple-YouTube-Age-Restriction-Bypass.git#v2.5.8",
     "vudio": "2.1.1",
     "x11": "2.3.0",
-    "youtubei.js": "7.0.0"
+    "youtubei.js": "8.0.0"
   },
   "devDependencies": {
     "@playwright/test": "1.40.0",
