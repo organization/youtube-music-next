@@ -117,8 +117,8 @@ dependencies:
     specifier: 14.2.1
     version: 14.2.1
   simple-youtube-age-restriction-bypass:
-    specifier: git+https://github.com/organization/Simple-YouTube-Age-Restriction-Bypass.git#v2.5.8
-    version: github.com/organization/Simple-YouTube-Age-Restriction-Bypass/816a882c68fcfe6cdd9410a6877b88093ed15b28
+    specifier: git+https://github.com/organization/Simple-YouTube-Age-Restriction-Bypass.git#v2.5.9
+    version: github.com/organization/Simple-YouTube-Age-Restriction-Bypass/4e2db89ccb2fb880c5110add9ff3f1dfb78d0ff6
   ts-morph:
     specifier: 20.0.0
     version: 20.0.0
@@ -6300,8 +6300,8 @@ packages:
       undici: 5.26.3
     dev: false
 
-  github.com/organization/Simple-YouTube-Age-Restriction-Bypass/816a882c68fcfe6cdd9410a6877b88093ed15b28:
-    resolution: {tarball: https://codeload.github.com/organization/Simple-YouTube-Age-Restriction-Bypass/tar.gz/816a882c68fcfe6cdd9410a6877b88093ed15b28}
+  github.com/organization/Simple-YouTube-Age-Restriction-Bypass/4e2db89ccb2fb880c5110add9ff3f1dfb78d0ff6:
+    resolution: {tarball: https://codeload.github.com/organization/Simple-YouTube-Age-Restriction-Bypass/tar.gz/4e2db89ccb2fb880c5110add9ff3f1dfb78d0ff6}
     name: simple-youtube-age-restriction-bypass
     version: 2.5.9
     engines: {node: '>=18.0.0', npm: '>=7.0.0'}
